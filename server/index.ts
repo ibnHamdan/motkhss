@@ -1,18 +1,15 @@
 import express from 'express';
-import { db } from './datastore';
+import {
+  createOpportunityHandler,
+  listOpportunitiesHandler,
+} from './handlers/opportunityHandler';
 
 const app = express();
 
 app.use(express.json());
 
-app.get('/opportunities/', (req, res) => {
-  res.send({ post: db.listOpportunities() });
-});
+app.get('/opportunities/', listOpportunitiesHandler);
 
-app.post('/opportunities', (req, res) => {
-  const opportunity = req.body;
-  db.creatOpportunity(opportunity);
-  res.sendStatus(200);
-});
+app.post('/opportunities', createOpportunityHandler);
 
 app.listen(3000);
