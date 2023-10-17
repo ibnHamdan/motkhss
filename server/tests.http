@@ -1,0 +1,15 @@
+get http://localhost:3000/opportunities
+
+
+###
+
+post http://localhost:3000/opportunities
+Content-Type: application/json
+
+{
+  "id" : "1",
+  "title": "first opportunity",
+  "url ": "first opportunity ul",
+  "userId": "1",
+  "postedAt": 12345
+}
