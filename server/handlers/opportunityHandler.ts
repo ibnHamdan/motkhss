@@ -19,12 +19,14 @@ export const createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, 
   req,
   res
 ) => {
-  if (!req.body.title) {
-    return res.status(400).send('Title field is required, but missing');
-  }
   if (!req.body.userId || !req.body.title || !req.body.url) {
     return res.sendStatus(403);
   }
+
+  // TODO: VALIDATE USER EXISTS
+  // TODO: GET USER id from session
+  // TODO: validate title and url is not empty,
+
   const opportunity = {
     id: crypto.randomUUID(),
     postedAt: Date.now(),
