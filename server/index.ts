@@ -1,26 +1,31 @@
 import express, { ErrorRequestHandler, RequestHandler } from 'express';
 import { createOpportunityHandler, listOpportunitiesHandler } from './handlers/opportunityHandler';
 import asyncHandler from 'express-async-handler';
-const app = express();
+import { initDB } from './datastore';
 
-app.use(express.json());
+(async () => {
+  await initDB();
+  const app = express();
 
-const requestLoggerMiddleware: RequestHandler = (req, res, next) => {
-  console.log(req.method, req.path, '-body:', req.body);
-  next();
-};
+  app.use(express.json());
 
-app.use(requestLoggerMiddleware);
+  const requestLoggerMiddleware: RequestHandler = (req, res, next) => {
+    console.log(req.method, req.path, '-body:', req.body);
+    next();
+  };
 
-app.get('/v1/opportunities', asyncHandler(listOpportunitiesHandler));
+  app.use(requestLoggerMiddleware);
 
-app.post('/v1/opportunities', asyncHandler(createOpportunityHandler));
+  app.get('/v1/opportunities', asyncHandler(listOpportunitiesHandler));
 
-const errHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.log('Uncaught exception from errHandler:', err);
-  return res.status(500).send('Oops, an unexpected error occurred, please try agnin');
-};
+  app.post('/v1/opportunities', asyncHandler(createOpportunityHandler));
 
-app.use(errHandler);
+  const errHandler: ErrorRequestHandler = (err, req, res, next) => {
+    console.log('Uncaught exception from errHandler:', err);
+    return res.status(500).send('Oops, an unexpected error occurred, please try agnin');
+  };
 
-app.listen(3000);
+  app.use(errHandler);
+
+  app.listen(3000);
+})();
