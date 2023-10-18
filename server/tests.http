@@ -7,7 +7,7 @@ post http://localhost:3000/v1/opportunities
 Content-Type: application/json
 
 {
-  "title1": "first opportunity",
+  "title": "first opportunity",
   "url": "first opportunity ul",
   "userId": "1"
 }

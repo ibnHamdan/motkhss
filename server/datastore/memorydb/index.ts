@@ -7,45 +7,51 @@ export class InMemoryDataStore implements Datastore {
   private comments: Comment[] = [];
   private likes: Like[] = [];
 
-  createUser(user: User): void {
+  createUser(user: User): Promise<void> {
     this.users.push(user);
+    return Promise.resolve();
   }
-  getUserByEmail(email: string): User | undefined {
-    return this.users.find((u) => u.email === email);
+  getUserByEmail(email: string): Promise<User | undefined> {
+    return Promise.resolve(this.users.find((u) => u.email === email));
   }
-  getUserByUsername(username: string): User | undefined {
-    return this.users.find((u) => u.username === username);
+  getUserByUsername(username: string): Promise<User | undefined> {
+    return Promise.resolve(this.users.find((u) => u.username === username));
   }
-  listOpportunities(): Opportunity[] {
-    return this.opportunities;
+  listOpportunities(): Promise<Opportunity[]> {
+    return Promise.resolve(this.opportunities);
   }
-  creatOpportunity(opportunity: Opportunity): void {
+  creatOpportunity(opportunity: Opportunity): Promise<void> {
     this.opportunities.push(opportunity);
+    return Promise.resolve();
   }
-  getOpportunity(id: string): Opportunity | undefined {
-    return this.opportunities.find((o) => o.id === id);
+  getOpportunity(id: string): Promise<Opportunity | undefined> {
+    return Promise.resolve(this.opportunities.find((o) => o.id === id));
   }
-  deleteOpportunity(id: string): void {
+  deleteOpportunity(id: string): Promise<void> {
     const index = this.opportunities.findIndex((o) => o.id === id);
     if (index === -1) {
-      return;
+      return Promise.resolve();
     }
     this.opportunities.splice(index, 1);
+    return Promise.resolve();
   }
-  createLike(like: Like): void {
+  createLike(like: Like): Promise<void> {
     this.likes.push(like);
+    return Promise.resolve();
   }
-  createComment(comment: Comment): void {
+  createComment(comment: Comment): Promise<void> {
     this.comments.push(comment);
+    return Promise.resolve();
   }
-  listComment(opportunityId: string): Comment[] {
-    return this.comments.filter((c) => c.id === opportunityId);
+  listComment(opportunityId: string): Promise<Comment[]> {
+    return Promise.resolve(this.comments.filter((c) => c.id === opportunityId));
   }
-  deleteComment(id: string): void {
+  deleteComment(id: string): Promise<void> {
     const index = this.comments.findIndex((c) => c.id === id);
     if (index === -1) {
-      return;
+      return Promise.resolve();
     }
     this.comments.splice(index, 1);
+    return Promise.resolve();
   }
 }

@@ -7,15 +7,14 @@ import {
 import { db } from '../datastore';
 import { ExpressHandler } from '../types';
 
-export const listOpportunitiesHandler: ExpressHandler<ListOpportunitiesRequest, ListOpportunitiesResponse> = (
+export const listOpportunitiesHandler: ExpressHandler<ListOpportunitiesRequest, ListOpportunitiesResponse> = async (
   req,
   res
 ) => {
-  throw new Error('Ooops!');
-  res.send({ opportunities: db.listOpportunities() });
+  res.send({ opportunities: await db.listOpportunities() });
 };
 
-export const createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, CreateOpportunityResponse> = (
+export const createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, CreateOpportunityResponse> = async (
   req,
   res
 ) => {
@@ -34,6 +33,6 @@ export const createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, 
     url: req.body.url,
     userId: req.body.userId,
   };
-  db.creatOpportunity(opportunity);
+  await db.creatOpportunity(opportunity);
   res.sendStatus(200);
 };
