@@ -1,13 +1,13 @@
-get http://localhost:3000/opportunities
+get http://localhost:3000/v1/opportunities
 
 
 ###
 
-post http://localhost:3000/opportunities
+post http://localhost:3000/v1/opportunities
 Content-Type: application/json
 
 {
-  "title": "first opportunity",
+  "title1": "first opportunity",
   "url": "first opportunity ul",
   "userId": "1"
 }

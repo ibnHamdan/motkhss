@@ -1,23 +1,27 @@
+import {
+  CreateOpportunityRequest,
+  CreateOpportunityResponse,
+  ListOpportunitiesRequest,
+  ListOpportunitiesResponse,
+} from '../api';
 import { db } from '../datastore';
-import { ExpressHandler, Opportunity } from '../types';
+import { ExpressHandler } from '../types';
 
-export const listOpportunitiesHandler: ExpressHandler<{}, {}> = (
+export const listOpportunitiesHandler: ExpressHandler<ListOpportunitiesRequest, ListOpportunitiesResponse> = (
   req,
   res
 ) => {
+  throw new Error('Ooops!');
   res.send({ opportunities: db.listOpportunities() });
 };
 
-type CreateOpportunityRequest = Pick<
-  Opportunity,
-  'title' | 'url' | 'userId'
->;
-interface CreateOpportunityResponse {}
-
-export const createOpportunityHandler: ExpressHandler<
-  CreateOpportunityRequest,
-  CreateOpportunityResponse
-> = (req, res) => {
+export const createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, CreateOpportunityResponse> = (
+  req,
+  res
+) => {
+  if (!req.body.title) {
+    return res.status(400).send('Title field is required, but missing');
+  }
   if (!req.body.userId || !req.body.title || !req.body.url) {
     return res.sendStatus(403);
   }
