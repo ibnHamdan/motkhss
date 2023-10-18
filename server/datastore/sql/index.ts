@@ -1,17 +1,21 @@
-import { open } from 'sqlite';
+import { open, Database } from 'sqlite';
 import sqlite3 from 'sqlite3';
 import path from 'path';
 import { Datastore } from '..';
 import { User, Opportunity, Like, Comment } from '../../types';
 
 export class SqlDataStore implements Datastore {
+  private db!: Database<sqlite3.Database, sqlite3.Statement>;
+
   public async openDb() {
-    const db = await open({
+    this.db = await open({
       filename: path.join(__dirname, 'motkhss.sqlite'),
       driver: sqlite3.Database,
     });
 
-    await db.migrate({
+    this.db.run(' PRAGMA foreign_keys = ON;');
+
+    await this.db.migrate({
       migrationsPath: path.join(__dirname, 'migrations'),
     });
 
@@ -27,10 +31,17 @@ export class SqlDataStore implements Datastore {
     throw new Error('Method not implemented.');
   }
   listOpportunities(): Promise<Opportunity[]> {
-    throw new Error('Method not implemented.');
+    return this.db.all<Opportunity[]>(`SELECT * FROM opportunities`);
   }
-  creatOpportunity(opportunity: Opportunity): Promise<void> {
-    throw new Error('Method not implemented.');
+  async creatOpportunity(opportunity: Opportunity): Promise<void> {
+    await this.db.run(
+      'INSERT INTO opportunities (id, title, url, postedAt, userId) VALUES (?,?,?,?,?)',
+      opportunity.id,
+      opportunity.title,
+      opportunity.url,
+      opportunity.postedAt,
+      opportunity.userId
+    );
   }
   getOpportunity(id: string): Promise<Opportunity | undefined> {
     throw new Error('Method not implemented.');
