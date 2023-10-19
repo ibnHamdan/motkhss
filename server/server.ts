@@ -20,7 +20,9 @@ import { authMiddleware } from './middleware/authMiddleware';
   app.use(requestLoggerMiddleware);
 
   // Public endpoint
-  app.get('/healthz', (req, res) => res.send({ status: ' ✌️ OK ' }));
+  app.get('/healthz', (req, res) =>
+    res.send({ status: ' ✌️ OK ✌️ ' })
+  );
 
   app.get(
     '/v1/opportunities',
