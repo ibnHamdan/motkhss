@@ -12,11 +12,10 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: checkout repo+branch
-        uses: actions/checkout@v3
-
-        - name: Deploy and restart web server
-          run: |
-            cd server
-            npm install
-            PORT=3000 JWT_SECRET-12345 PASSWORD_SALT=mot ENV=production npm run start:prod
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Deploy and restart web server
+        run: |
+          cd server
+          npm install
+          PORT=3000 JWT_SECRET=12345 PASSWORD_SALT=mysecretsalt ENV=production npm run start:prod
