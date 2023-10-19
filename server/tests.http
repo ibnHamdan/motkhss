@@ -20,10 +20,10 @@ POST  http://localhost:3000/v1/signup
 Content-Type: application/json
 
 {
-  "username": "one",
-  "firstName": "one",
-  "lastName": "one",
-  "email": "one@mail.com",
+  "username": "two",
+  "firstName": "two",
+  "lastName": "two",
+  "email": "two@mail.com",
   "password": "123"
 }
 
