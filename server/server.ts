@@ -16,6 +16,9 @@ import { authMiddleware } from './middleware/authMiddleware';
 
   app.use(requestLoggerMiddleware);
 
+  // Public endpoint
+  app.get('/healthz', (req, res) => res.send({ status: 'OK ✌️' }));
+
   app.get('/v1/opportunities', asyncHandler(listOpportunitiesHandler));
 
   app.post('/v1/signup', asyncHandler(signUpHandler));
@@ -23,9 +26,10 @@ import { authMiddleware } from './middleware/authMiddleware';
 
   app.use(authMiddleware);
 
+  // Protected endpoints
   app.post('/v1/opportunities', asyncHandler(createOpportunityHandler));
 
   app.use(errHandler);
 
-  app.listen(3000);
+  app.listen(process.env.PORT || 3000);
 })();
