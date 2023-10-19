@@ -13,7 +13,7 @@ export class SqlDataStore implements Datastore {
       driver: sqlite3.Database,
     });
 
-    this.db.run(' PRAGMA foreign_keys = ON;');
+    this.db.run('PRAGMA foreign_keys = ON;');
 
     await this.db.migrate({
       migrationsPath: path.join(__dirname, 'migrations'),
@@ -21,14 +21,22 @@ export class SqlDataStore implements Datastore {
 
     return this;
   }
-  createUser(user: User): Promise<void> {
-    throw new Error('Method not implemented.');
+  async createUser(user: User): Promise<void> {
+    await this.db.run(
+      'INSERT INTO users (id, email, password, firstName, lastName, userName) VALUES (?,?,?,?,?,?)',
+      user.id,
+      user.email,
+      user.password,
+      user.firstName,
+      user.lastName,
+      user.username
+    );
   }
   getUserByEmail(email: string): Promise<User | undefined> {
-    throw new Error('Method not implemented.');
+    return this.db.get(`SELECT * FROM users WHERE email = ?`, email);
   }
   getUserByUsername(username: string): Promise<User | undefined> {
-    throw new Error('Method not implemented.');
+    return this.db.get(`SELECT * FROM users WHERE username = ?`, username);
   }
   listOpportunities(): Promise<Opportunity[]> {
     return this.db.all<Opportunity[]>(`SELECT * FROM opportunities`);

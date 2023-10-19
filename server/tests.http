@@ -8,6 +8,30 @@ Content-Type: application/json
 
 {
   "title": "first opportunity",
-  "url": "first opportunity ul",
-  "userId": "1"
+  "url": "first opportunity url",
+  "userId": "123"
+}
+
+
+###
+
+POST  http://localhost:3000/v1/signup
+Content-Type: application/json
+
+{
+  "username": "one",
+  "firstName": "one",
+  "lastName": "one",
+  "email": "one@mail.com",
+  "password": "123"
+}
+
+###
+
+POST http://localhost:3000/v1/signin
+Content-Type: application/json
+
+{
+  "login": "one@mail.com",
+  "password": "123"
 }
