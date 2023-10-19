@@ -5,12 +5,11 @@ get http://localhost:3000/v1/opportunities
 
 post http://localhost:3000/v1/opportunities
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1Y2MzYzRiYi1lZDM5LTQ0ODgtOTBlOC1iMzdiNjFmNGFkNTciLCJpYXQiOjE2OTc3MTA3MDF9.tGR4neVVuBzNgvuTwMjHv_DhYfuJ8DRyZz8_ZEsHqjU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0NTZhYTU2OS1kZTBmLTQ3Y2YtOGFhYS0zODUxMGUzNDkxZmYiLCJpYXQiOjE2OTc3MTE4NjEsImV4cCI6MTY5OTAwNzg2MX0.QLbnW571J_wbyxHcyZSeV9VKuDod_9rFGmJy0XDcRn0
 
 {
-  "title": "second opportunity",
-  "url": "second opportunity url",
-  "userId": "5cc3c4bb-ed39-4488-90e8-b37b61f4ad57"
+  "title": "third opportunity",
+  "url": "third opportunity url"
 }
 
 
@@ -33,6 +32,6 @@ POST http://localhost:3000/v1/signin
 Content-Type: application/json
 
 {
-  "login": "one@mail.com",
+  "login": "two@mail.com",
   "password": "123"
 }

@@ -18,7 +18,7 @@ export const createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, 
   req,
   res
 ) => {
-  if (!req.body.userId || !req.body.title || !req.body.url) {
+  if (!req.body.title || !req.body.url) {
     return res.sendStatus(403);
   }
 
@@ -31,7 +31,7 @@ export const createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, 
     postedAt: Date.now(),
     title: req.body.title,
     url: req.body.url,
-    userId: req.body.userId,
+    userId: res.locals.userId,
   };
   await db.creatOpportunity(opportunity);
   res.sendStatus(200);

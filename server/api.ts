@@ -6,7 +6,7 @@ export interface ListOpportunitiesResponse {
   opportunities: Opportunity[];
 }
 
-export type CreateOpportunityRequest = Pick<Opportunity, 'title' | 'url' | 'userId'>;
+export type CreateOpportunityRequest = Pick<Opportunity, 'title' | 'url'>;
 export interface CreateOpportunityResponse {}
 
 export interface GetOpportunityRequest {}
