@@ -1,8 +1,5 @@
 import express from 'express';
-import {
-  createOpportunityHandler,
-  listOpportunitiesHandler,
-} from './handlers/opportunityHandler';
+import { createOpportunityHandler, listOpportunitiesHandler } from './handlers/opportunityHandler';
 import asyncHandler from 'express-async-handler';
 import { initDB } from './datastore';
 import { signInHandler, signUpHandler } from './handlers/authHandler';
@@ -20,14 +17,9 @@ import { authMiddleware } from './middleware/authMiddleware';
   app.use(requestLoggerMiddleware);
 
   // Public endpoint
-  app.get('/healthz', (req, res) =>
-    res.send({ status: ' ✌️ OK ✌️ ' })
-  );
+  app.get('/healthz', (req, res) => res.send({ status: '  OK ✌️ ' }));
 
-  app.get(
-    '/v1/opportunities',
-    asyncHandler(listOpportunitiesHandler)
-  );
+  app.get('/v1/opportunities', asyncHandler(listOpportunitiesHandler));
 
   app.post('/v1/signup', asyncHandler(signUpHandler));
   app.post('/v1/signin', asyncHandler(signInHandler));
@@ -35,10 +27,7 @@ import { authMiddleware } from './middleware/authMiddleware';
   app.use(authMiddleware);
 
   // Protected endpoints
-  app.post(
-    '/v1/opportunities',
-    asyncHandler(createOpportunityHandler)
-  );
+  app.post('/v1/opportunities', asyncHandler(createOpportunityHandler));
 
   app.use(errHandler);
 
