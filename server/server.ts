@@ -32,4 +32,5 @@ import { authMiddleware } from './middleware/authMiddleware';
   app.use(errHandler);
 
   app.listen(process.env.PORT || 3000);
+  console.log(`secrets : ${process.env.JWT_SECRET}`);
 })();
