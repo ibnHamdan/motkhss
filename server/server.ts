@@ -7,6 +7,9 @@ import { requestLoggerMiddleware } from './middleware/loggerMiddleware';
 import { errHandler } from './middleware/errorrMiddleware';
 import dotenv from 'dotenv';
 import { authMiddleware } from './middleware/authMiddleware';
+import https from 'https';
+import fs from 'fs';
+
 (async () => {
   await initDB();
   dotenv.config();
@@ -31,6 +34,17 @@ import { authMiddleware } from './middleware/authMiddleware';
 
   app.use(errHandler);
 
-  app.listen(process.env.PORT || 3000);
-  console.log(`secrets : ${process.env.JWT_SECRET}`);
+  const port = process.env.PORT;
+  const env = process.env.ENV;
+
+  const listener = () => console.log(`Listening on prot ${port} on ${env} envirnoment`);
+
+  if (env === 'production') {
+    const key = fs.readFileSync('/home/motkhss-user/certs/motkhss.com/privkey.pem', 'utf-8');
+    const cert = fs.readFileSync('/home/motkhss-user/certs/motkhss.com/cert.pem', 'utf-8');
+
+    https.createServer({ key, cert }, app).listen(port, listener);
+  } else {
+    app.listen(port, listener);
+  }
 })();
