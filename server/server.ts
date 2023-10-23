@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import { authMiddleware } from './middleware/authMiddleware';
 import https from 'https';
 import fs from 'fs';
+import path from 'path';
 
 (async () => {
   await initDB();
@@ -17,7 +18,11 @@ import fs from 'fs';
 
   app.use(express.json());
 
+  app.use(express.static(path.join(__dirname, 'public')));
+
   app.use(requestLoggerMiddleware);
+
+  app.get('/', (req, res) => res.sendFile('public/index.html'));
 
   // Public endpoint
   app.get('/healthz', (req, res) => res.send({ status: '  OK ✌️ ' }));
