@@ -1,30 +1,15 @@
-import { ListOpportunitiesResponse } from '@motkhss/shared';
-import { listOpportunities } from './client';
-import { useQuery } from 'react-query';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ListOpportunities } from './pages/list-opprtunities';
+import { ViewOpportunity } from './pages/view-opportunity';
 
 export const App = () => {
-  // const [opportunities, setOpportunities] = useState<Opportunity[]>();
-
-  // useEffect(() => {
-  //   fetch(`${HOST}/api/v1/opportunities`)
-  //     .then((res) => res.json())
-  //     .then((res) => setOpportunities(res.opportunities));
-  // }, []);
-
-  const { data, error, isLoading } = useQuery<ListOpportunitiesResponse>(['listOpportunities'], listOpportunities);
-
-  if (isLoading) {
-    return <div>loading .....</div>;
-  }
-
-  if (error) {
-    return <div>error loading opportunities</div>;
-  }
-
   return (
-    <>
-      Opportunities:
-      {!!data?.opportunities && <div>{JSON.stringify(data.opportunities)}</div>}
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ListOpportunities />} />
+        <Route path="/o/:id" element={<ViewOpportunity />} />
+      </Routes>
+      {/* Opportunities: {!!data?.opportunities && <div>{JSON.stringify(data.opportunities)}</div>} */}
+    </BrowserRouter>
   );
 };
