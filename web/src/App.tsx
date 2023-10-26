@@ -1,28 +1,30 @@
-import { useEffect, useState } from 'react';
-import { Opportunity } from '../../shared';
+import { ListOpportunitiesResponse } from '@motkhss/shared';
+import { listOpportunities } from './client';
+import { useQuery } from 'react-query';
 
 export const App = () => {
-  const [opportunities, setOpportunities] = useState<Opportunity[]>();
+  // const [opportunities, setOpportunities] = useState<Opportunity[]>();
 
-  useEffect(() => {
-    fetch('http://localhost:3001/api/v1/opportunities')
-      .then((res) => res.json())
-      .then((res) => setOpportunities(res.opportunities));
-  }, []);
+  // useEffect(() => {
+  //   fetch(`${HOST}/api/v1/opportunities`)
+  //     .then((res) => res.json())
+  //     .then((res) => setOpportunities(res.opportunities));
+  // }, []);
+
+  const { data, error, isLoading } = useQuery<ListOpportunitiesResponse>(['listOpportunities'], listOpportunities);
+
+  if (isLoading) {
+    return <div>loading .....</div>;
+  }
+
+  if (error) {
+    return <div>error loading opportunities</div>;
+  }
 
   return (
     <>
-      {(opportunities?.length || 0) > 0 ? <div>{JSON.stringify(opportunities)}</div> : <div>No opportunitite</div>}
-      {(opportunities?.length || 0) > 0 ? (
-        <div>
-          {opportunities?.map((o) => {
-            console.log(o);
-            return <h1>{o.title}</h1>;
-          })}
-        </div>
-      ) : (
-        <div>No opportunitite</div>
-      )}
+      Opportunities:
+      {!!data?.opportunities && <div>{JSON.stringify(data.opportunities)}</div>}
     </>
   );
 };
