@@ -1,37 +1,38 @@
-get http://localhost:3000/v1/opportunities
+get http://localhost:3001/api/v1/opportunities
 
 
 ###
 
-post http://localhost:3000/v1/opportunities
+post http://localhost:3001/api/v1/opportunities
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0NTZhYTU2OS1kZTBmLTQ3Y2YtOGFhYS0zODUxMGUzNDkxZmYiLCJpYXQiOjE2OTc3MTE4NjEsImV4cCI6MTY5OTAwNzg2MX0.QLbnW571J_wbyxHcyZSeV9VKuDod_9rFGmJy0XDcRn0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDdjZDE2Ny01NmY2LTRmYmEtOGZiYy1mNjIwM2Q2ZmJkYzEiLCJpYXQiOjE2OTgzMDgxMTIsImV4cCI6MTY5OTYwNDExMn0.TvrfDtXzN81GnMc4sbzrhgaPpplXywHuUWR-3F_322g
+
 
 {
-  "title": "third opportunity",
-  "url": "third opportunity url"
+  "title": "sixth opportunity by third user",
+  "url": "sixth opportunity url"
 }
 
 
 ###
 
-POST  http://localhost:3000/v1/signup
+POST  http://localhost:3001/api/v1/signup
 Content-Type: application/json
 
 {
-  "username": "two",
-  "firstName": "two",
-  "lastName": "two",
-  "email": "two@mail.com",
+  "username": "three",
+  "firstName": "three",
+  "lastName": "three",
+  "email": "three@mail.com",
   "password": "123"
 }
 
 ###
 
-POST http://localhost:3000/v1/signin
+POST http://localhost:3001/api/v1/signin
 Content-Type: application/json
 
 {
-  "login": "two@mail.com",
+  "login": "three@mail.com",
   "password": "123"
 }

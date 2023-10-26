@@ -1,7 +1,19 @@
 import { Datastore } from '..';
-import { User, Opportunity, Like, Comment } from '../../types';
+import { User, Opportunity, Like, Comment } from '@motkhss/shared';
 
 export class InMemoryDataStore implements Datastore {
+  getLikes(postId: string): Promise<number> {
+    throw new Error('Method not implemented.');
+  }
+  exists(like: Like): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+  listComments(opportunityId: string): Promise<Comment[]> {
+    throw new Error('Method not implemented.');
+  }
+  getUserById(id: string): Promise<User | undefined> {
+    throw new Error('Method not implemented.');
+  }
   private users: User[] = [];
   private opportunities: Opportunity[] = [];
   private comments: Comment[] = [];
