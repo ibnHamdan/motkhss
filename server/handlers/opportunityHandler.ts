@@ -1,38 +1,70 @@
+import { Opportunity } from '@motkhss/shared';
 import {
   CreateOpportunityRequest,
   CreateOpportunityResponse,
+  DeleteOpportunityRequest,
+  DeleteOpportunityResponse,
+  GetOpportunityResponse,
   ListOpportunitiesRequest,
   ListOpportunitiesResponse,
 } from '../api';
-import { db } from '../datastore';
-import { ExpressHandler } from '../types';
+import { Datastore } from '../datastore';
+import { ExpressHandler, ExpressHandlerWithParams } from '../types';
 
-export const listOpportunitiesHandler: ExpressHandler<ListOpportunitiesRequest, ListOpportunitiesResponse> = async (
-  req,
-  res
-) => {
-  res.send({ opportunities: await db.listOpportunities() });
-};
+export class OpportunityHandler {
+  private db: Datastore;
 
-export const createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, CreateOpportunityResponse> = async (
-  req,
-  res
-) => {
-  if (!req.body.title || !req.body.url) {
-    return res.sendStatus(403);
+  constructor(db: Datastore) {
+    this.db = db;
   }
 
-  // TODO: VALIDATE USER EXISTS
-  // TODO: GET USER id from session
-  // TODO: validate title and url is not empty,
-
-  const opportunity = {
-    id: crypto.randomUUID(),
-    postedAt: Date.now(),
-    title: req.body.title,
-    url: req.body.url,
-    userId: res.locals.userId,
+  public listOpportunitiesHandler: ExpressHandler<ListOpportunitiesRequest, ListOpportunitiesResponse> = async (
+    req,
+    res
+  ) => {
+    res.send({ opportunities: await this.db.listOpportunities() });
   };
-  await db.creatOpportunity(opportunity);
-  res.sendStatus(200);
-};
+
+  public createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, CreateOpportunityResponse> = async (
+    req,
+    res
+  ) => {
+    if (!req.body.title || !req.body.url) {
+      return res.sendStatus(403);
+    }
+
+    // TODO: VALIDATE USER EXISTS
+    // TODO: validate title and url is not empty,
+
+    const opportunity = {
+      id: crypto.randomUUID(),
+      postedAt: Date.now(),
+      title: req.body.title,
+      url: req.body.url,
+      userId: res.locals.userId,
+    };
+    await this.db.creatOpportunity(opportunity);
+    res.sendStatus(200);
+  };
+
+  public deleteOpportunityHandler: ExpressHandler<DeleteOpportunityRequest, DeleteOpportunityResponse> = async (
+    req,
+    res
+  ) => {
+    if (!req.body.opportunityId) {
+      return res.sendStatus(400);
+    }
+    this.db.deleteOpportunity(req.body.opportunityId);
+    return res.sendStatus(200);
+  };
+
+  public getOpportunityHandler: ExpressHandlerWithParams<{ id: string }, null, GetOpportunityResponse> = async (
+    req,
+    res
+  ) => {
+    if (!req.params.id) return res.sendStatus(400);
+
+    const OpportunityToReturn: Opportunity | undefined = await this.db.getOpportunity(req.params.id);
+    return res.send({ opportunity: OpportunityToReturn });
+  };
+}

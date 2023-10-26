@@ -1,4 +1,4 @@
-import { Opportunity } from '../../types';
+import { Opportunity } from '@motkhss/shared';
 
 export interface opportunityDao {
   listOpportunities(): Promise<Opportunity[]>;

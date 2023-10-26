@@ -1,4 +1,4 @@
-import { Opportunity, User } from './types';
+import { Comment, Opportunity, User } from '@motkhss/shared';
 
 // Opportunity APT
 export interface ListOpportunitiesRequest {}
@@ -14,9 +14,26 @@ export interface GetOpportunityResponse {
   opportunity: Opportunity;
 }
 
+export type DeleteOpportunityRequest = { opportunityId: string };
+export type DeleteOpportunityResponse = {};
+
 // Comment APIs
 
+export type CreateCommentRequest = Pick<Comment, 'comment'>;
+export interface CreateCommentResponse {}
+
+export interface ListCommentsResponse {
+  comments: Comment[];
+}
+
+export type DeleteCommentResponse = {};
+
 // Like APIs
+export interface CreateLikeResponse {}
+
+export interface ListLikesResponse {
+  likes: Number;
+}
 
 // User APIs
 export type SignUpRequest = Pick<User, 'email' | 'firstName' | 'lastName' | 'username' | 'password'>;
@@ -33,3 +50,14 @@ export type SignInResponse = {
   user: Pick<User, 'email' | 'firstName' | 'lastName' | 'username' | 'id'>;
   jwt: string;
 };
+
+export type GetUserByEmailRequest = { emailId: string };
+export interface GetUserByEmailResponse {
+  user: User;
+}
+export type GetUserByUserNameRequest = {
+  username: string;
+};
+export interface GetUserByUserNameResponse {
+  user: User;
+}

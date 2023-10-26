@@ -1,7 +1,7 @@
-import { Comment } from '../../types';
+import { Comment } from '@motkhss/shared';
 
 export interface CommentDao {
   createComment(comment: Comment): Promise<void>;
-  listComment(opportunityId: string): Promise<Comment[]>;
+  listComments(opportunityId: string): Promise<Comment[]>;
   deleteComment(id: string): Promise<void>;
 }
