@@ -1,55 +1,80 @@
-import express from 'express';
-import { createOpportunityHandler, listOpportunitiesHandler } from './handlers/opportunityHandler';
-import asyncHandler from 'express-async-handler';
-import { initDB } from './datastore';
-import { signInHandler, signUpHandler } from './handlers/authHandler';
+import { /*db,*/ db, initDB } from './datastore';
+
 import { requestLoggerMiddleware } from './middleware/loggerMiddleware';
 import { errHandler } from './middleware/errorrMiddleware';
 import dotenv from 'dotenv';
-import { authMiddleware } from './middleware/authMiddleware';
 import https from 'https';
 import fs from 'fs';
-import path from 'path';
+import express, { RequestHandler } from 'express';
+import cors from 'cors';
+import asyncHandler from 'express-async-handler';
+import { OpportunityHandler } from './handlers/opportunityHandler';
+import { authMiddleware } from './middleware/authMiddleware';
+import { AuthHandler } from './handlers/authHandler';
+import { LikeHandler } from './handlers/likeHandler';
+import { CommentHandler } from './handlers/commentHandler';
+import { ENDPOINT_CONFIGS, Endpoints } from './endpoints';
+import http from 'http';
 
-(async () => {
-  await initDB();
+export async function createServer(dbPath: string, logRequest: boolean = true) {
+  await initDB(dbPath);
+
   dotenv.config();
+
   const app = express();
 
   app.use(express.json());
+  app.use(cors());
 
-  app.use(express.static(path.join(__dirname, 'public')));
+  if (logRequest) {
+    app.use(requestLoggerMiddleware);
+  }
 
-  app.use(requestLoggerMiddleware);
+  const authHandler = new AuthHandler(db);
+  const opportunityHandler = new OpportunityHandler(db);
+  const likeHandler = new LikeHandler(db);
+  const commentHandler = new CommentHandler(db);
 
-  app.get('/', (req, res) => res.sendFile('public/index.html'));
+  //  Map of endpoints handlers
+  const HANDLERS: { [key in Endpoints]: RequestHandler<any, any> } = {
+    [Endpoints.signin]: authHandler.signInHandler,
+    [Endpoints.signup]: authHandler.signUpHandler,
 
-  // Public endpoint
-  app.get('/healthz', (req, res) => res.send({ status: '  OK ✌️ ' }));
+    [Endpoints.listOpportunities]: opportunityHandler.listOpportunitiesHandler,
+    [Endpoints.getOpportunity]: opportunityHandler.getOpportunityHandler,
+    [Endpoints.createOpportunity]: opportunityHandler.createOpportunityHandler,
+    [Endpoints.deleteOpportunity]: opportunityHandler.deleteOpportunityHandler,
 
-  app.get('/v1/opportunities', asyncHandler(listOpportunitiesHandler));
+    [Endpoints.listLikes]: likeHandler.listLikesHandler,
+    [Endpoints.createLike]: likeHandler.createLikeHandler,
 
-  app.post('/v1/signup', asyncHandler(signUpHandler));
-  app.post('/v1/signin', asyncHandler(signInHandler));
+    [Endpoints.listComments]: commentHandler.listCommentsHandler,
+    [Endpoints.createComment]: commentHandler.createCommentHandler,
+    [Endpoints.deleteComment]: commentHandler.deleteCommentHandler,
 
-  app.use(authMiddleware);
+    [Endpoints.healthz]: (_, res) => res.send({ status: 'OK' }),
+  };
 
-  // Protected endpoints
-  app.post('/v1/opportunities', asyncHandler(createOpportunityHandler));
+  // Register handlers in express
+  Object.keys(Endpoints).forEach((entry) => {
+    const config = ENDPOINT_CONFIGS[entry as Endpoints];
+    const handler = HANDLERS[entry as Endpoints];
+
+    config.auth
+      ? app[config.method](config.url, authMiddleware, asyncHandler(handler))
+      : app[config.method](config.url, asyncHandler(handler));
+  });
 
   app.use(errHandler);
 
-  const port = process.env.PORT;
-  const env = process.env.ENV;
+  const { ENV } = process.env;
 
-  const listener = () => console.log(`Listening on prot ${port} on ${env} envirnoment`);
-
-  if (env === 'production') {
+  if (ENV === 'production') {
     const key = fs.readFileSync('/home/motkhss-user/certs/motkhss.com/privkey.pem', 'utf-8');
     const cert = fs.readFileSync('/home/motkhss-user/certs/motkhss.com/cert.pem', 'utf-8');
 
-    https.createServer({ key, cert }, app).listen(port, listener);
+    return https.createServer({ key, cert }, app);
   } else {
-    app.listen(port, listener);
+    return http.createServer(app);
   }
-})();
+}
