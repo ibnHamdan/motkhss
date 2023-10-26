@@ -1,4 +1,4 @@
-import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from '../api';
+import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse } from '@motkhss/shared';
 import { signJwt } from '../auth';
 import { Datastore } from '../datastore';
 import { ExpressHandler } from '../types';

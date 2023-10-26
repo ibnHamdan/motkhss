@@ -1,4 +1,4 @@
-import { Comment, Opportunity, User } from '@motkhss/shared';
+import { Comment, Opportunity, User } from './types';
 
 // Opportunity APT
 export interface ListOpportunitiesRequest {}

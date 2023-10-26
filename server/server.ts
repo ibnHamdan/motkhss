@@ -13,7 +13,7 @@ import { authMiddleware } from './middleware/authMiddleware';
 import { AuthHandler } from './handlers/authHandler';
 import { LikeHandler } from './handlers/likeHandler';
 import { CommentHandler } from './handlers/commentHandler';
-import { ENDPOINT_CONFIGS, Endpoints } from './endpoints';
+import { ENDPOINT_CONFIGS, Endpoints } from '@motkhss/shared';
 import http from 'http';
 
 export async function createServer(dbPath: string, logRequest: boolean = true) {

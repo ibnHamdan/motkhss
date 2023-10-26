@@ -1,5 +1,10 @@
-import { Comment } from '@motkhss/shared';
-import { CreateCommentRequest, CreateCommentResponse, DeleteCommentResponse, ListCommentsResponse } from '../api';
+import {
+  Comment,
+  CreateCommentRequest,
+  CreateCommentResponse,
+  DeleteCommentResponse,
+  ListCommentsResponse,
+} from '@motkhss/shared';
 import { Datastore } from '../datastore';
 import { ExpressHandlerWithParams } from '../types';
 

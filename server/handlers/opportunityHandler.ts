@@ -1,5 +1,5 @@
-import { Opportunity } from '@motkhss/shared';
 import {
+  Opportunity,
   CreateOpportunityRequest,
   CreateOpportunityResponse,
   DeleteOpportunityRequest,
@@ -7,7 +7,7 @@ import {
   GetOpportunityResponse,
   ListOpportunitiesRequest,
   ListOpportunitiesResponse,
-} from '../api';
+} from '@motkhss/shared';
 import { Datastore } from '../datastore';
 import { ExpressHandler, ExpressHandlerWithParams } from '../types';
 

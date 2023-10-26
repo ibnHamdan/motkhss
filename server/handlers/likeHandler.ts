@@ -1,5 +1,5 @@
 import { Like } from '@motkhss/shared';
-import { CreateLikeResponse, ListLikesResponse } from '../api';
+import { CreateLikeResponse, ListLikesResponse } from '@motkhss/shared';
 import { Datastore } from '../datastore';
 import { ExpressHandlerWithParams } from '../types';
 

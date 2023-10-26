@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import { Opportunity } from '../../shared';
 
-function App() {
+export const App = () => {
+  const [opportunities, setOpportunities] = useState<Opportunity[]>();
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/v1/opportunities')
+      .then((res) => res.json())
+      .then((res) => setOpportunities(res.opportunities));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {(opportunities?.length || 0) > 0 ? <div>{JSON.stringify(opportunities)}</div> : <div>No opportunitite</div>}
+      {(opportunities?.length || 0) > 0 ? (
+        <div>
+          {opportunities?.map((o) => {
+            console.log(o);
+            return <h1>{o.title}</h1>;
+          })}
+        </div>
+      ) : (
+        <div>No opportunitite</div>
+      )}
+    </>
   );
-}
-
-export default App;
+};
