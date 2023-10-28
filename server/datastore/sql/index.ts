@@ -72,10 +72,20 @@ export class SqlDataStore implements Datastore {
       comment.postedAt;
   }
   async listComments(opportunityId: string): Promise<Comment[]> {
-    return await this.db.all<Comment[]>('SELECT * FROM comments WHERE ooportunityId = ?', opportunityId);
+    return await this.db.all<Comment[]>(
+      'SELECT * FROM comments WHERE ooportunityId = ? ORDER BY postedAt DESC',
+      opportunityId
+    );
   }
   async deleteComment(id: string): Promise<void> {
     await this.db.run('DELETE FROM comments WHERE id = ?', id);
+  }
+  async countComment(opportunityId: string): Promise<number> {
+    const resutl = await this.db.get<{ count: number }>(
+      'SELECT COUNT(*) as count FROM comments WHERE  opportunityId = ? ',
+      opportunityId
+    );
+    return resutl?.count ?? 0;
   }
 
   async getLikes(opportunityId: string): Promise<number> {

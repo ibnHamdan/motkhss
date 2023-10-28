@@ -21,6 +21,7 @@ export enum Endpoints {
   listComments = 'listComments',
   createComment = 'createComment',
   deleteComment = 'deleteComment',
+  countComments = 'countComments',
 }
 
 export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
@@ -83,5 +84,9 @@ export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
     url: '/api/v1/comments/:opprtunityId',
     method: 'post',
     auth: true,
+  },
+  [Endpoints.countComments]: {
+    url: '/api/v1/comments/:opportunityId/count',
+    method: 'get',
   },
 };

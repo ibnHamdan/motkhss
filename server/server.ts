@@ -51,6 +51,7 @@ export async function createServer(dbPath: string, logRequest: boolean = true) {
     [Endpoints.listComments]: commentHandler.listCommentsHandler,
     [Endpoints.createComment]: commentHandler.createCommentHandler,
     [Endpoints.deleteComment]: commentHandler.deleteCommentHandler,
+    [Endpoints.countComments]: commentHandler.count,
 
     [Endpoints.healthz]: (_, res) => res.send({ status: 'OK' }),
   };

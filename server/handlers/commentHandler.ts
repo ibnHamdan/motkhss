@@ -1,5 +1,6 @@
 import {
   Comment,
+  CountCommentResponse,
   CreateCommentRequest,
   CreateCommentResponse,
   DeleteCommentResponse,
@@ -55,5 +56,15 @@ export class CommentHandler {
     }
     const comments = await this.db.listComments(req.params.opportunityId);
     return res.send({ comments });
+  };
+
+  public count: ExpressHandlerWithParams<{ opportunityId: string }, null, CountCommentResponse> = async (req, res) => {
+    if (!req.params.opportunityId) {
+      console.log('countComments handle r errorr', req.params.opportunityId);
+      return res.status(400).send({ error: 'Opportunity ID missing' });
+    }
+    console.log('countComments handler', req.params.opportunityId);
+    const count = await this.db.countComment(req.params.opportunityId);
+    return res.send({ count });
   };
 }

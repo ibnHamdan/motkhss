@@ -36,3 +36,10 @@ Content-Type: application/json
   "login": "three@mail.com",
   "password": "123"
 }
+
+
+###
+
+
+GET http://localhost:3001/api/v1/comments/7febeecf-8197-4e4d-b332-cf79a5a4427c/count
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDdjZDE2Ny01NmY2LTRmYmEtOGZiYy1mNjIwM2Q2ZmJkYzEiLCJpYXQiOjE2OTgzMDgxMTIsImV4cCI6MTY5OTYwNDExMn0.TvrfDtXzN81GnMc4sbzrhgaPpplXywHuUWR-3F_322g

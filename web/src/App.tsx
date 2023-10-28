@@ -10,7 +10,7 @@ export const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ListOpportunities />} />
-          <Route path="/o/:id" element={<ViewOpportunity />} />
+          <Route path="/opportunity/:id" element={<ViewOpportunity />} />
         </Routes>
         {/* Opportunities: {!!data?.opportunities && <div>{JSON.stringify(data.opportunities)}</div>} */}
       </BrowserRouter>
