@@ -2,6 +2,7 @@ import { QueryClient } from 'react-query';
 
 const HOST = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://motkhss.com';
 
+export const LOCAL_STORAGE_JWT = 'jwtToken';
 export class ApiError extends Error {
   public status: number;
 
@@ -33,6 +34,10 @@ export async function callEndpoint<Request, Response>(
 ): Promise<Response> {
   const respone = await fetch(`${HOST}${url}`, {
     method: method,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_JWT)}`,
+      'Content-Type': 'application/json',
+    },
     body: method === 'get' ? undefined : JSON.stringify(request),
   });
   if (!respone.ok) {

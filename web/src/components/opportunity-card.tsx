@@ -1,37 +1,73 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
-import { CountCommentResponse, CountCommentsRequest, ENDPOINT_CONFIGS, Opportunity } from '@motkhss/shared';
+import { Box, Button, Flex, Icon, Text } from '@chakra-ui/react';
+import {
+  CountCommentResponse,
+  CountCommentsRequest,
+  ENDPOINT_CONFIGS,
+  GetUserRequest,
+  GetUserResponse,
+  Opportunity,
+} from '@motkhss/shared';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
+import { BsHeart } from 'react-icons/bs';
 
-export const OpportunityCard: React.FC<Opportunity> = (opportunity) => {
-  const { method, url } = ENDPOINT_CONFIGS.countComments;
+export const OpportunityCard = ({ id, title, url: opportunityUrl, userId }: Opportunity) => {
+  const { method: userMethod, url: getUserUrl } = ENDPOINT_CONFIGS.getUser;
   const {
-    data: commentsCount,
-    isLoading,
+    data: user,
     error,
-  } = useQuery([`countComments${opportunity.id}`], () =>
-    callEndpoint<CountCommentsRequest, CountCommentResponse>(url.replace(':opportunityId', opportunity.id), method, {
-      opportunityId: opportunity.id,
+    isLoading,
+  } = useQuery([`getUser${userId}`], () =>
+    callEndpoint<GetUserRequest, GetUserResponse>(getUserUrl.replace(':id', userId), userMethod, { id: userId })
+  );
+
+  const { method, url } = ENDPOINT_CONFIGS.countComments;
+  const { data: commentsCountRes } = useQuery([`countComments${id}`], () =>
+    callEndpoint<CountCommentsRequest, CountCommentResponse>(url.replace(':opportunityId', id), method, {
+      opportunityId: id,
     })
   );
 
-  const count = isLoading ? '...' : error ? 'unknown' : commentsCount?.count ?? '0';
+  const userName = isLoading || !user ? '...' : error ? '<unknown>' : user.userName;
+  const commentsCount = commentsCountRes?.count ?? '0';
+
   return (
-    <Box>
-      <Flex gap={3}>
-        <Text fontSize="md" fontWeight={'bold'} color={'cyan.600'}>
-          {opportunity.title}
-        </Text>
-        <Text fontWeight={'bold'} color={'gray.700'}>
-          {opportunity.url}
-        </Text>
-        <Link to={`/opportunity/${opportunity.id}`}>
-          <Button variant={'outline'} size={'sm'}>
-            {count} Comment
-          </Button>
-        </Link>
-      </Flex>
-    </Box>
+    <Flex m={4} gap={2} align="baseline">
+      <Box position="relative" w={4}>
+        <Icon position="absolute" top="-0.8rem" as={BsHeart} fill="gray" cursor="pointer" _hover={{ fill: 'brown' }} />
+      </Box>
+
+      <Box>
+        <Flex align="center">
+          <Link to={`/p/${id}`}>
+            <Text color="gray.600" fontWeight="bold" pr={2}>
+              {title}
+            </Text>
+          </Link>
+
+          <Link to={`/p/${id}`}>
+            <Text fontSize="sm" color="gray.400">
+              ({opportunityUrl})
+            </Text>
+          </Link>
+
+          <Link to={`/p/${id}`}>
+            <Button ml={2} variant="outline" borderColor="gray.300" borderRadius={4} p={2} size="xs" color="gray">
+              {commentsCount ? `${commentsCount} Comments` : 'Discuss'}
+            </Button>
+          </Link>
+        </Flex>
+
+        <Flex gap={1}>
+          <Text fontSize="sm" color="gray.500">
+            By:
+          </Text>
+          <Text fontSize="sm" fontWeight="bold" color="gray.500">
+            {userName}
+          </Text>
+        </Flex>
+      </Box>
+    </Flex>
   );
 };

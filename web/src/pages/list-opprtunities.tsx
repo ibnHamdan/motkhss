@@ -2,6 +2,7 @@ import { ENDPOINT_CONFIGS, ListOpportunitiesRequest, ListOpportunitiesResponse }
 import { useQuery } from 'react-query';
 import { callEndpoint } from '../fetch';
 import { OpportunityCard } from '../components/opportunity-card';
+import { Box } from '@chakra-ui/react';
 
 export const ListOpportunities = () => {
   const { url, method } = ENDPOINT_CONFIGS.listOpportunities;
@@ -18,9 +19,10 @@ export const ListOpportunities = () => {
   }
 
   return (
-    <div>
-      Opportunities:
-      {!!data?.opportunities && data.opportunities.map((o, i) => <OpportunityCard {...o} key={i} />)}
-    </div>
+    <Box>
+      {data?.opportunities.map((opportunity, i) => (
+        <OpportunityCard key={i} {...opportunity} />
+      ))}
+    </Box>
   );
 };

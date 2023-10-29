@@ -1,6 +1,6 @@
 import { Comment, Opportunity, User } from './types';
 
-// Opportunity APT
+// Opportunity APIs
 export interface ListOpportunitiesRequest {}
 export interface ListOpportunitiesResponse {
   opportunities: Opportunity[];
@@ -38,7 +38,7 @@ export interface ListLikesResponse {
 }
 
 // User APIs
-export type SignUpRequest = Pick<User, 'email' | 'firstName' | 'lastName' | 'username' | 'password'>;
+export type SignUpRequest = Pick<User, 'email' | 'firstName' | 'lastName' | 'userName' | 'password'>;
 export interface SignUpResponse {
   jwt: string;
 }
@@ -49,9 +49,12 @@ export interface SignInRequest {
 }
 
 export type SignInResponse = {
-  user: Pick<User, 'email' | 'firstName' | 'lastName' | 'username' | 'id'>;
+  user: Pick<User, 'email' | 'firstName' | 'lastName' | 'userName' | 'id'>;
   jwt: string;
 };
+
+export type GetUserRequest = {};
+export type GetUserResponse = Pick<User, 'id' | 'firstName' | 'lastName' | 'userName' | 'email'>;
 
 export type GetUserByEmailRequest = { emailId: string };
 export interface GetUserByEmailResponse {
@@ -63,3 +66,6 @@ export type GetUserByUserNameRequest = {
 export interface GetUserByUserNameResponse {
   user: User;
 }
+
+export type GetCurrentUserRequest = {};
+export type GetCurrentUserResponse = Pick<User, 'firstName' | 'lastName' | 'userName' | 'email'>;
