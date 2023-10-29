@@ -5,11 +5,6 @@ import { ExpressHandlerWithParams } from '../types';
 
 export class LikeHandler {
   private db: Datastore;
-
-  constructor(db: Datastore) {
-    this.db = db;
-  }
-
   public createLikeHandler: ExpressHandlerWithParams<{ postId: string }, null, CreateLikeResponse> = async (
     req,
     res
@@ -37,7 +32,6 @@ export class LikeHandler {
     this.db.createLike(likeForInsert);
     return res.sendStatus(200);
   };
-
   public listLikesHandler: ExpressHandlerWithParams<{ postId: string }, null, ListLikesResponse> = async (req, res) => {
     if (!req.params.postId) {
       return res.status(400).send({ error: 'Post ID missing' });
@@ -45,4 +39,8 @@ export class LikeHandler {
     const count: Number = await this.db.getLikes(req.params.postId);
     return res.send({ likes: count });
   };
+
+  constructor(db: Datastore) {
+    this.db = db;
+  }
 }

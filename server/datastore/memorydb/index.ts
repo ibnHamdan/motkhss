@@ -1,7 +1,10 @@
 import { Datastore } from '..';
 import { User, Opportunity, Like, Comment } from '@motkhss/shared';
 
-export class InMemoryDataStore implements Datastore {
+class InMemoryDataStore implements Datastore {
+  countComment(opportunityId: string): Promise<number> {
+    throw new Error('Method not implemented.');
+  }
   getLikes(postId: string): Promise<number> {
     throw new Error('Method not implemented.');
   }
@@ -27,7 +30,7 @@ export class InMemoryDataStore implements Datastore {
     return Promise.resolve(this.users.find((u) => u.email === email));
   }
   getUserByUsername(username: string): Promise<User | undefined> {
-    return Promise.resolve(this.users.find((u) => u.username === username));
+    return Promise.resolve(this.users.find((u) => u.userName === username));
   }
   listOpportunities(): Promise<Opportunity[]> {
     return Promise.resolve(this.opportunities);

@@ -13,18 +13,6 @@ import { ExpressHandler, ExpressHandlerWithParams } from '../types';
 
 export class OpportunityHandler {
   private db: Datastore;
-
-  constructor(db: Datastore) {
-    this.db = db;
-  }
-
-  public listOpportunitiesHandler: ExpressHandler<ListOpportunitiesRequest, ListOpportunitiesResponse> = async (
-    req,
-    res
-  ) => {
-    res.send({ opportunities: await this.db.listOpportunities() });
-  };
-
   public createOpportunityHandler: ExpressHandler<CreateOpportunityRequest, CreateOpportunityResponse> = async (
     req,
     res
@@ -46,7 +34,6 @@ export class OpportunityHandler {
     await this.db.creatOpportunity(opportunity);
     res.sendStatus(200);
   };
-
   public deleteOpportunityHandler: ExpressHandler<DeleteOpportunityRequest, DeleteOpportunityResponse> = async (
     req,
     res
@@ -57,7 +44,6 @@ export class OpportunityHandler {
     this.db.deleteOpportunity(req.body.opportunityId);
     return res.sendStatus(200);
   };
-
   public getOpportunityHandler: ExpressHandlerWithParams<{ id: string }, null, GetOpportunityResponse> = async (
     req,
     res
@@ -67,4 +53,14 @@ export class OpportunityHandler {
     const OpportunityToReturn: Opportunity | undefined = await this.db.getOpportunity(req.params.id);
     return res.send({ opportunity: OpportunityToReturn });
   };
+  public listOpportunitiesHandler: ExpressHandler<ListOpportunitiesRequest, ListOpportunitiesResponse> = async (
+    req,
+    res
+  ) => {
+    res.send({ opportunities: await this.db.listOpportunities() });
+  };
+
+  constructor(db: Datastore) {
+    this.db = db;
+  }
 }

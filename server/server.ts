@@ -10,11 +10,11 @@ import cors from 'cors';
 import asyncHandler from 'express-async-handler';
 import { OpportunityHandler } from './handlers/opportunityHandler';
 import { authMiddleware } from './middleware/authMiddleware';
-import { AuthHandler } from './handlers/authHandler';
 import { LikeHandler } from './handlers/likeHandler';
 import { CommentHandler } from './handlers/commentHandler';
 import { ENDPOINT_CONFIGS, Endpoints } from '@motkhss/shared';
 import http from 'http';
+import { UserHandler } from './handlers/userHandler';
 
 export async function createServer(dbPath: string, logRequest: boolean = true) {
   await initDB(dbPath);
@@ -30,15 +30,17 @@ export async function createServer(dbPath: string, logRequest: boolean = true) {
     app.use(requestLoggerMiddleware);
   }
 
-  const authHandler = new AuthHandler(db);
+  const userHandler = new UserHandler(db);
   const opportunityHandler = new OpportunityHandler(db);
   const likeHandler = new LikeHandler(db);
   const commentHandler = new CommentHandler(db);
 
   //  Map of endpoints handlers
   const HANDLERS: { [key in Endpoints]: RequestHandler<any, any> } = {
-    [Endpoints.signin]: authHandler.signInHandler,
-    [Endpoints.signup]: authHandler.signUpHandler,
+    [Endpoints.signin]: userHandler.signIn,
+    [Endpoints.signup]: userHandler.signUp,
+    [Endpoints.getUser]: userHandler.get,
+    [Endpoints.getCurrentUser]: userHandler.getCurrent,
 
     [Endpoints.listOpportunities]: opportunityHandler.listOpportunitiesHandler,
     [Endpoints.getOpportunity]: opportunityHandler.getOpportunityHandler,

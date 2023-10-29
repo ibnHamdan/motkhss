@@ -43,3 +43,8 @@ Content-Type: application/json
 
 GET http://localhost:3001/api/v1/comments/7febeecf-8197-4e4d-b332-cf79a5a4427c/count
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDdjZDE2Ny01NmY2LTRmYmEtOGZiYy1mNjIwM2Q2ZmJkYzEiLCJpYXQiOjE2OTgzMDgxMTIsImV4cCI6MTY5OTYwNDExMn0.TvrfDtXzN81GnMc4sbzrhgaPpplXywHuUWR-3F_322g
+
+
+###
+
+GET http://localhost:3001/api/v1/users/647cd167-56f6-4fba-8fbc-f6203d6fbdc1
