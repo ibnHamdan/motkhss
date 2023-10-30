@@ -29,6 +29,7 @@ export const OpportunityCard = ({ id, title, url: opportunityUrl, userId }: Oppo
     })
   );
 
+  const urlWithProtocol = opportunityUrl.startsWith('http') ? opportunityUrl : 'http://' + opportunityUrl;
   const userName = isLoading || !user ? '...' : error ? '<unknown>' : user.userName;
   const commentsCount = commentsCountRes?.count ?? '0';
 
@@ -40,17 +41,17 @@ export const OpportunityCard = ({ id, title, url: opportunityUrl, userId }: Oppo
 
       <Box>
         <Flex align="center">
-          <Link to={`/p/${id}`}>
+          <a href={`/o/${id}`}>
             <Text color="gray.600" fontWeight="bold" pr={2}>
               {title}
             </Text>
-          </Link>
+          </a>
 
-          <Link to={`/p/${id}`}>
+          <a href={urlWithProtocol}>
             <Text fontSize="sm" color="gray.400">
-              ({opportunityUrl})
+              ({getUrlDomain(urlWithProtocol)})
             </Text>
-          </Link>
+          </a>
 
           <Link to={`/p/${id}`}>
             <Button ml={2} variant="outline" borderColor="gray.300" borderRadius={4} p={2} size="xs" color="gray">
@@ -70,4 +71,13 @@ export const OpportunityCard = ({ id, title, url: opportunityUrl, userId }: Oppo
       </Box>
     </Flex>
   );
+};
+
+const getUrlDomain = (url: string): string => {
+  try {
+    const short = new URL(url).host;
+    return short.startsWith('wwww') ? short.substring(4) : short;
+  } catch {
+    return url;
+  }
 };
