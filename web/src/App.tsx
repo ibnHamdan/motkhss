@@ -13,7 +13,10 @@ export const App = () => {
         <NavBar />
         <Routes>
           <Route path={ROUTES.HOME} element={<ListOpportunities />} />
-          <Route path={ROUTES.VIEW_OPPORTUNITY(':id')} element={<ViewOpportunity />} />
+          <Route
+            path={ROUTES.VIEW_OPPORTUNITY(':id')}
+            element={<ViewOpportunity />}
+          />
           <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
           <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
         </Routes>
