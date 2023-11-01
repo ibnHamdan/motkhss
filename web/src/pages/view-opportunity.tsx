@@ -13,6 +13,8 @@ import { useCallback, useState } from 'react';
 import { Box, Button, Flex, Skeleton, SkeletonText, Text, Textarea } from '@chakra-ui/react';
 import { OpportunityCard } from '../components/opportunity-card';
 import { useDocumentTitle } from '../doc-title';
+import { isLoggedIn } from '../fetch/auth';
+import { CommentCard } from '../components/comment-card';
 
 export const ViewOpportunity = () => {
   const { id: opportunityId } = useParams();
@@ -66,28 +68,36 @@ export const ViewOpportunity = () => {
       </Box>
 
       <form onSubmit={submitComment}>
-        <Flex direction="column" gap={4} mt={4}>
+        <Flex direction="column" gap={4} mt={4} ml={4}>
           {commentsError ? <Text color="red.700">Error loading comments </Text> : null}
-
           {commentsLoading ? <SkeletonText mt="4" noOfLines={3} spacing="4" skeletonHeight="2" /> : null}
+          {isLoggedIn() && (
+            <>
+              <Textarea
+                placeholder="Type to add your own comment.."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                maxW="xl"
+              />
+              <Box>
+                <Button size="sm" onClick={submitComment} disabled={!comment.trim().length}>
+                  Add comment
+                </Button>
+              </Box>
 
+              <Box w="xl">
+                <hr />
+              </Box>
+            </>
+          )}
           {commentsData?.comments?.map((comment, i) => (
-            <Box key={i}>{comment.comment}</Box>
+            <CommentCard key={i} comment={comment} />
           ))}
-
           {!commentsData?.comments.length && (
             <Text color={'GrayText'} fontStyle={'italic'}>
               No comments yet. Add the first comment bellow
             </Text>
           )}
-
-          <Box w="xl">
-            <hr />
-          </Box>
-          <Textarea value={comment} onChange={(e) => setComment(e.target.value)} maxW={'xl'} />
-          <Box>
-            <Button onClick={submitComment}>Add comment</Button>
-          </Box>
         </Flex>
       </form>
     </Box>

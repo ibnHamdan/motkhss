@@ -19,7 +19,7 @@ export const ListOpportunities = () => {
   }
 
   return (
-    <Box>
+    <Box maxW={'2xl'}>
       {data?.opportunities.map((opportunity, i) => (
         <OpportunityCard key={i} opportunity={opportunity} />
       ))}

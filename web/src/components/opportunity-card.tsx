@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
 import { BsHeart } from 'react-icons/bs';
 import React from 'react';
+import { formatDistance } from 'date-fns';
 
 export const OpportunityCard: React.FC<{ opportunity: Opportunity; hideDiscuss?: boolean }> = ({
   opportunity,
@@ -67,13 +68,10 @@ export const OpportunityCard: React.FC<{ opportunity: Opportunity; hideDiscuss?:
           )}
         </Flex>
 
-        <Flex gap={1}>
-          <Text fontSize="sm" color="gray.500">
-            By:
-          </Text>
-          <Text fontSize="sm" fontWeight="bold" color="gray.500">
-            {userName}
-          </Text>
+        <Flex gap={1} fontSize={'sm'} color={'gray.500'}>
+          <Text>By:</Text>
+          <Text fontWeight="bold">{userName}</Text>
+          <Text> - {formatDistance(opportunity.postedAt, Date.now(), { addSuffix: true })}</Text>
         </Flex>
       </Box>
     </Flex>

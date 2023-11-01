@@ -2,7 +2,7 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./" ,
+  "homepage": "./",
   "dependencies": {
     "@chakra-ui/react": "^2.8.1",
     "@craco/craco": "^7.0.0-alpha.9",
@@ -12,6 +12,7 @@
     "@types/node": "^16.18.59",
     "@types/react": "^18.2.31",
     "@types/react-dom": "^18.2.14",
+    "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
