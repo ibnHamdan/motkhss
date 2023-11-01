@@ -76,7 +76,7 @@ export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
   },
 
   [Endpoints.listComments]: {
-    url: '/api/v1/comments/:opprtunityId',
+    url: '/api/v1/comments/:opportunityId',
     method: 'get',
   },
   [Endpoints.createComment]: {

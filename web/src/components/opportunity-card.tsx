@@ -11,8 +11,13 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
 import { BsHeart } from 'react-icons/bs';
+import React from 'react';
 
-export const OpportunityCard = ({ id, title, url: opportunityUrl, userId }: Opportunity) => {
+export const OpportunityCard: React.FC<{ opportunity: Opportunity; hideDiscuss?: boolean }> = ({
+  opportunity,
+  hideDiscuss,
+}) => {
+  const { id, url: opportunityUrl, title, userId } = opportunity;
   const { method: userMethod, url: getUserUrl } = ENDPOINT_CONFIGS.getUser;
   const {
     data: user,
@@ -53,11 +58,13 @@ export const OpportunityCard = ({ id, title, url: opportunityUrl, userId }: Oppo
             </Text>
           </a>
 
-          <Link to={`/p/${id}`}>
-            <Button ml={2} variant="outline" borderColor="gray.300" borderRadius={4} p={2} size="xs" color="gray">
-              {commentsCount ? `${commentsCount} Comments` : 'Discuss'}
-            </Button>
-          </Link>
+          {!hideDiscuss && (
+            <Link to={`/p/${id}`}>
+              <Button ml={2} variant="outline" borderColor="gray.300" borderRadius={4} p={2} size="xs" color="gray">
+                {commentsCount ? `${commentsCount} Comments` : 'Discuss'}
+              </Button>
+            </Link>
+          )}
         </Flex>
 
         <Flex gap={1}>

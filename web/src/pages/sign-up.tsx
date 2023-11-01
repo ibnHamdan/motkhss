@@ -38,11 +38,18 @@ export const SignUp = () => {
     <form onSubmit={signup}>
       <Flex maxW={'sm'} mx={'auto'} my={10} direction={'column'} gap={4}>
         <RequiredInput placeholder="Username" value={un} variant={'filled'} onChange={(e) => setUn(e.target.value)} />
-        <RequiredInput placeholder="Passord" value={pw} variant={'filled'} onChange={(e) => setPw(e.target.value)} />
+        <RequiredInput
+          placeholder="Password"
+          value={pw}
+          variant={'filled'}
+          type="password"
+          onChange={(e) => setPw(e.target.value)}
+        />
         <RequiredInput
           placeholder="email"
           value={email}
           variant={'filled'}
+          type="email"
           onChange={(e) => setEmail(e.target.value)}
         />
         <RequiredInput

@@ -21,7 +21,7 @@ export const ListOpportunities = () => {
   return (
     <Box>
       {data?.opportunities.map((opportunity, i) => (
-        <OpportunityCard key={i} {...opportunity} />
+        <OpportunityCard key={i} opportunity={opportunity} />
       ))}
     </Box>
   );
