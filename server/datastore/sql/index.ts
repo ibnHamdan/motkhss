@@ -16,11 +16,14 @@ export class SqlDataStore implements Datastore {
   }
 
   async createComment(comment: Comment): Promise<void> {
-    await this.db.run('INSERT INTO Comments(id, userId, comment, postedAt) VALUES(?,?,?,?,?)'),
+    await this.db.run(
+      'INSERT INTO Comments(id, userId,opportunityId, comment, postedAt) VALUES(?,?,?,?,?)',
       comment.id,
       comment.userId,
       comment.opportunityId,
-      comment.postedAt;
+      comment.comment,
+      comment.postedAt
+    );
   }
 
   async createLike(like: Like): Promise<void> {
@@ -77,7 +80,7 @@ export class SqlDataStore implements Datastore {
   }
 
   async getOpportunity(id: string): Promise<Opportunity | undefined> {
-    return await this.db.get<Opportunity>('SELECT * FROM opprtunities id =?', id);
+    return await this.db.get<Opportunity>('SELECT * FROM opportunities WHERE id = ?', id);
   }
 
   getUserByEmail(email: string): Promise<User | undefined> {
@@ -94,7 +97,7 @@ export class SqlDataStore implements Datastore {
 
   async listComments(opportunityId: string): Promise<Comment[]> {
     return await this.db.all<Comment[]>(
-      'SELECT * FROM comments WHERE ooportunityId = ? ORDER BY postedAt DESC',
+      'SELECT * FROM Comments WHERE opportunityId = ? ORDER BY postedAt DESC',
       opportunityId
     );
   }
