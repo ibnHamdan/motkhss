@@ -10,7 +10,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
 import { useCallback, useState } from 'react';
-import { Box, Button, Flex, Skeleton, SkeletonText, Text, Textarea } from '@chakra-ui/react';
+import { Box, Button, Flex, SkeletonText, Text, Textarea } from '@chakra-ui/react';
 import { OpportunityCard } from '../components/opportunity-card';
 import { useDocumentTitle } from '../doc-title';
 import { isLoggedIn } from '../fetch/auth';
