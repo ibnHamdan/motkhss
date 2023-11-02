@@ -13,58 +13,47 @@ import { callEndpoint } from '../fetch';
 import { BsHeart } from 'react-icons/bs';
 import React from 'react';
 import { formatDistance } from 'date-fns';
+import { isLoggedIn } from '../fetch/auth';
 
 export const OpportunityCard: React.FC<{
   opportunity: Opportunity;
   hideDiscuss?: boolean;
 }> = ({ opportunity, hideDiscuss }) => {
   const { id, url: opportunityUrl, title, userId } = opportunity;
-  const { method: userMethod, url: getUserUrl } =
-    ENDPOINT_CONFIGS.getUser;
+  const { method: userMethod, url: getUserUrl } = ENDPOINT_CONFIGS.getUser;
   const {
     data: user,
     error,
     isLoading,
   } = useQuery([`getUser${userId}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(
-      getUserUrl.replace(':id', userId),
-      userMethod,
-      { id: userId }
-    )
+    callEndpoint<GetUserRequest, GetUserResponse>(getUserUrl.replace(':id', userId), userMethod, { id: userId })
   );
 
   const { method, url } = ENDPOINT_CONFIGS.countComments;
-  const { data: commentsCountRes } = useQuery(
-    [`countComments${id}`],
-    () =>
-      callEndpoint<CountCommentsRequest, CountCommentResponse>(
-        url.replace(':opportunityId', id),
-        method,
-        {
-          opportunityId: id,
-        }
-      )
+  const { data: commentsCountRes } = useQuery([`countComments${id}`], () =>
+    callEndpoint<CountCommentsRequest, CountCommentResponse>(url.replace(':opportunityId', id), method, {
+      opportunityId: id,
+    })
   );
 
-  const urlWithProtocol = opportunityUrl.startsWith('http')
-    ? opportunityUrl
-    : 'http://' + opportunityUrl;
-  const userName =
-    isLoading || !user ? '...' : error ? '<unknown>' : user.userName;
+  const urlWithProtocol = opportunityUrl.startsWith('http') ? opportunityUrl : 'http://' + opportunityUrl;
+  const userName = isLoading || !user ? '...' : error ? '<unknown>' : user.userName;
   const commentsCount = commentsCountRes?.count ?? '0';
 
   return (
     <Flex m={4} gap={2} align="baseline">
-      <Box position="relative" w={4}>
-        <Icon
-          position="absolute"
-          top="-0.8rem"
-          as={BsHeart}
-          fill="gray"
-          cursor="pointer"
-          _hover={{ fill: 'brown' }}
-        />
-      </Box>
+      {isLoggedIn() && (
+        <Box position="relative" w={4}>
+          <Icon
+            position="absolute"
+            top="-0.8rem"
+            as={BsHeart}
+            fill="gray"
+            cursor="pointer"
+            _hover={{ fill: 'brown' }}
+          />
+        </Box>
+      )}
 
       <Box>
         <Flex align="center">
@@ -82,18 +71,8 @@ export const OpportunityCard: React.FC<{
 
           {!hideDiscuss && (
             <Link to={`/o/${id}`}>
-              <Button
-                ml={2}
-                variant="outline"
-                borderColor="gray.300"
-                borderRadius={4}
-                p={2}
-                size="xs"
-                color="gray"
-              >
-                {commentsCount
-                  ? `${commentsCount} Comments`
-                  : 'Discuss'}
+              <Button ml={2} variant="outline" borderColor="gray.300" borderRadius={4} p={2} size="xs" color="gray">
+                {commentsCount ? `${commentsCount} Comments` : 'Discuss'}
               </Button>
             </Link>
           )}
