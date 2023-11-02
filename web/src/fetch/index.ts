@@ -40,6 +40,7 @@ export async function callEndpoint<Request, Response>(
     },
     body: method === 'get' ? undefined : JSON.stringify(request),
   });
+  console.log('callEndpoint', url, respone, respone.headers.get('content-type'));
   if (!respone.ok) {
     let msg = '';
     try {

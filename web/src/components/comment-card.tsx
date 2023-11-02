@@ -17,9 +17,7 @@ export const CommentCard: React.FC<{ comment: Comment }> = ({ comment }) => {
     error,
     isLoading,
   } = useQuery([`getUser${userId}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(getUserUrl.replace(':id', userId), getUserMethod, {
-      id: userId,
-    })
+    callEndpoint<GetUserRequest, GetUserResponse>(getUserUrl.replace(':id', userId), getUserMethod, {})
   );
 
   const userName =

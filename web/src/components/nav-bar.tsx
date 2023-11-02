@@ -22,7 +22,7 @@ export const NavBar = () => {
       enabled: isLoggedIn(),
     }
   );
-  console.log('currentUser', currentUser);
+
   return (
     <Flex py={4} px={10} align={'center'} justify={'space-between'} h={16}>
       <Link to={ROUTES.HOME}>

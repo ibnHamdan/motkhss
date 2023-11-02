@@ -6,6 +6,7 @@ import { ROUTES } from './routes';
 import { SignIn } from './pages/sign-in';
 import { SignUp } from './pages/sign-up';
 import { NewOpprtunity } from './pages/new-opportunity';
+import { UserProfile } from './pages/user-profile';
 
 export const App = () => {
   return (
@@ -18,6 +19,7 @@ export const App = () => {
           <Route path={ROUTES.NEW_OPPORTUNITY} element={<NewOpprtunity />} />
           <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
           <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+          <Route path={ROUTES.USER_PORFIEL(':id')} element={<UserProfile />} />
         </Routes>
         {/* Opportunities: {!!data?.opportunities && <div>{JSON.stringify(data.opportunities)}</div>} */}
       </BrowserRouter>

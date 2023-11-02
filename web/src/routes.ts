@@ -4,4 +4,5 @@ export const ROUTES = {
   SIGN_IN: '/signin',
   SIGN_UP: '/signup',
   NEW_OPPORTUNITY: '/new',
+  USER_PORFIEL: (uid: string) => `/u/${uid}`,
 };

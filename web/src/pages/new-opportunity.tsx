@@ -6,8 +6,10 @@ import { CreateOpportunityRequest, CreateOpportunityResponse, ENDPOINT_CONFIGS }
 import { ApiError, callEndpoint } from '../fetch';
 import { Box, Button, Flex, FormControl, FormLabel, Text } from '@chakra-ui/react';
 import { RequiredInput } from '../components/required-input';
+import { useDocumentTitle } from '../doc-title';
 
 export const NewOpprtunity = () => {
+  useDocumentTitle('New Opportunity');
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
@@ -30,7 +32,7 @@ export const NewOpprtunity = () => {
         setError((e as ApiError).message);
       }
     },
-    [navigate, title]
+    [navigate, title, url]
   );
 
   return (

@@ -5,8 +5,10 @@ import { ROUTES } from '../routes';
 import { ApiError } from '../fetch';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { RequiredInput } from '../components/required-input';
+import { useDocumentTitle } from '../doc-title';
 
 export const SignUp = () => {
+  useDocumentTitle('sign up');
   const navigate = useNavigate();
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');

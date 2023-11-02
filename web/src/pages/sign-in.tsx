@@ -4,8 +4,10 @@ import { isLoggedIn, signIn } from '../fetch/auth';
 import { ROUTES } from '../routes';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { RequiredInput } from '../components/required-input';
+import { useDocumentTitle } from '../doc-title';
 
 export const SignIn = () => {
+  useDocumentTitle('Sign in');
   const navigate = useNavigate();
   const [un, setUn] = useState('');
   const [pw, setPw] = useState('');

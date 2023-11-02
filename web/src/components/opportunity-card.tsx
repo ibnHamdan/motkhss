@@ -14,6 +14,7 @@ import { BsHeart } from 'react-icons/bs';
 import React from 'react';
 import { formatDistance } from 'date-fns';
 import { isLoggedIn } from '../fetch/auth';
+import { ROUTES } from '../routes';
 
 export const OpportunityCard: React.FC<{
   opportunity: Opportunity;
@@ -26,7 +27,7 @@ export const OpportunityCard: React.FC<{
     error,
     isLoading,
   } = useQuery([`getUser${userId}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(getUserUrl.replace(':id', userId), userMethod, { id: userId })
+    callEndpoint<GetUserRequest, GetUserResponse>(getUserUrl.replace(':id', userId), userMethod, {})
   );
 
   const { method, url } = ENDPOINT_CONFIGS.countComments;
@@ -80,7 +81,9 @@ export const OpportunityCard: React.FC<{
 
         <Flex gap={1} fontSize={'sm'} color={'gray.500'}>
           <Text>By:</Text>
-          <Text fontWeight="bold">{userName}</Text>
+          <Link to={user ? ROUTES.USER_PORFIEL(user.id) : '#'}>
+            <Text fontWeight="bold">{userName}</Text>
+          </Link>
           <Text>
             {' '}
             -{' '}

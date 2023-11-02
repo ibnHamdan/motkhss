@@ -24,6 +24,7 @@ export class UserHandler {
     if (!user) {
       return res.sendStatus(404);
     }
+
     return res.send({
       id: user.id,
       firstName: user.firstName,

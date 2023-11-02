@@ -48,3 +48,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDdjZ
 ###
 
 GET http://localhost:3001/api/v1/users/647cd167-56f6-4fba-8fbc-f6203d6fbdc1
+###
+GET http://localhost:3001/api/v1/users/456aa569-de0f-47cf-8aaa-38510e3491ff

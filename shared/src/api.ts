@@ -54,7 +54,7 @@ export type SignInResponse = {
 };
 
 export type GetUserRequest = {};
-export type GetUserResponse = Pick<User, 'id' | 'firstName' | 'lastName' | 'userName' | 'email'>;
+export type GetUserResponse = Pick<User, 'id' | 'firstName' | 'lastName' | 'userName'>;
 
 export type GetUserByEmailRequest = { emailId: string };
 export interface GetUserByEmailResponse {
