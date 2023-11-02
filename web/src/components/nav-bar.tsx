@@ -29,9 +29,14 @@ export const NavBar = () => {
         <Text>MOTKHSS</Text>
       </Link>
 
-      <Flex gap={5}>
+      <Flex gap={5} align={'center'}>
         {isLoggedIn() ? (
           <>
+            <Link to={ROUTES.NEW_OPPORTUNITY}>
+              <Button variant={'solid'} size={'sm'}>
+                Add Opportunity
+              </Button>
+            </Link>
             <Text fontSize={'sm'} color={'gray.600'}>
               {isLoading ? '...' : ''}
               {currentUser?.userName}

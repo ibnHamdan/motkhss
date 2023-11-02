@@ -5,6 +5,7 @@ import { NavBar } from './components/nav-bar';
 import { ROUTES } from './routes';
 import { SignIn } from './pages/sign-in';
 import { SignUp } from './pages/sign-up';
+import { NewOpprtunity } from './pages/new-opportunity';
 
 export const App = () => {
   return (
@@ -13,10 +14,8 @@ export const App = () => {
         <NavBar />
         <Routes>
           <Route path={ROUTES.HOME} element={<ListOpportunities />} />
-          <Route
-            path={ROUTES.VIEW_OPPORTUNITY(':id')}
-            element={<ViewOpportunity />}
-          />
+          <Route path={ROUTES.VIEW_OPPORTUNITY(':id')} element={<ViewOpportunity />} />
+          <Route path={ROUTES.NEW_OPPORTUNITY} element={<NewOpprtunity />} />
           <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
           <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
         </Routes>
