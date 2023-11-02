@@ -73,7 +73,7 @@ export class SqlDataStore implements Datastore {
 
   async getLikes(opportunityId: string): Promise<number> {
     let result = await this.db.get<{ count: number }>(
-      'SELECT COUNT(*) as count FROM likes WHERE opportunityId = ?',
+      'SELECT COUNT(*) FROM likes WHERE opportunityId = ?',
       opportunityId
     );
     return result?.count ?? 0;

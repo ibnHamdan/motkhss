@@ -68,4 +68,4 @@ export interface GetUserByUserNameResponse {
 }
 
 export type GetCurrentUserRequest = {};
-export type GetCurrentUserResponse = Pick<User, 'firstName' | 'lastName' | 'userName' | 'email'>;
+export type GetCurrentUserResponse = Pick<User, 'id' | 'firstName' | 'lastName' | 'userName' | 'email'>;

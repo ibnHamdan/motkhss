@@ -15,7 +15,7 @@ export const NavBar = () => {
   }, [navigate]);
 
   const { method, url } = ENDPOINT_CONFIGS.getCurrentUser;
-  const { data: currentUser, isLoading } = useQuery(
+  const { data: currentUser } = useQuery(
     ['getCurrentUser'],
     () => callEndpoint<GetCurrentUserRequest, GetCurrentUserResponse>(url, method, {}),
     {
@@ -37,10 +37,14 @@ export const NavBar = () => {
                 Add Opportunity
               </Button>
             </Link>
-            <Text fontSize={'sm'} color={'gray.600'}>
-              {isLoading ? '...' : ''}
-              {currentUser?.userName}
-            </Text>
+            {currentUser && (
+              <Link to={ROUTES.USER_PORFIEL(currentUser.id)}>
+                <Text fontSize={'sm'} color={'gray.600'}>
+                  {currentUser.userName}
+                </Text>
+              </Link>
+            )}
+
             <Button size={'sm'} variant={'link'} onClick={onSignout}>
               Sign out
             </Button>

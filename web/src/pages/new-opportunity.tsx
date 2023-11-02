@@ -45,11 +45,18 @@ export const NewOpprtunity = () => {
             value={title}
             variant={'filled'}
             onChange={(e) => setTitle(e.target.value)}
+            style={{ unicodeBidi: 'plaintext' }}
           />
         </FormControl>
         <FormControl isRequired>
           <FormLabel>Add the opportunity URL</FormLabel>
-          <RequiredInput placeholder="URL" value={url} variant={'filled'} onChange={(e) => setUrl(e.target.value)} />
+          <RequiredInput
+            placeholder="URL"
+            value={url}
+            variant={'filled'}
+            onChange={(e) => setUrl(e.target.value)}
+            style={{ unicodeBidi: 'plaintext' }}
+          />
         </FormControl>
 
         <Box m={'auto'}>

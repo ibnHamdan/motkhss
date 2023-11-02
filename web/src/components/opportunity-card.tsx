@@ -59,12 +59,12 @@ export const OpportunityCard: React.FC<{
       <Box>
         <Flex align="center">
           <a href={`/o/${id}`}>
-            <Text color="gray.600" fontWeight="bold" pr={2}>
+            <Text color="gray.600" fontWeight="bold" pr={2} style={{ unicodeBidi: 'plaintext' }}>
               {title}
             </Text>
           </a>
 
-          <a href={urlWithProtocol}>
+          <a href={urlWithProtocol} target="_blank" rel="noreferrer">
             <Text fontSize="sm" color="gray.400">
               ({getUrlDomain(urlWithProtocol)})
             </Text>
@@ -72,8 +72,16 @@ export const OpportunityCard: React.FC<{
 
           {!hideDiscuss && (
             <Link to={`/o/${id}`}>
-              <Button ml={2} variant="outline" borderColor="gray.300" borderRadius={4} p={2} size="xs" color="gray">
-                {commentsCount ? `${commentsCount} Comments` : 'Discuss'}
+              <Button
+                ml={2}
+                variant="outline"
+                borderColor="gray.300"
+                borderRadius={4}
+                p={2}
+                size="xs"
+                color={commentsCount ? undefined : 'gray'}
+              >
+                {commentsCount ? `${commentsCount} comment${commentsCount === 1 ? '' : 's'}` : 'discuss'}
               </Button>
             </Link>
           )}
