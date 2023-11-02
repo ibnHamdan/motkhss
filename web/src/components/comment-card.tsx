@@ -5,6 +5,7 @@ import { callEndpoint } from '../fetch';
 import { Box, Flex, Icon, SkeletonText, Text } from '@chakra-ui/react';
 import { BsHeart } from 'react-icons/bs';
 import { formatDistance } from 'date-fns';
+import { LinkItUrl } from 'react-linkify-it';
 
 export const CommentCard: React.FC<{ comment: Comment }> = ({ comment }) => {
   const { comment: commentText, postedAt, userId } = comment;
@@ -42,8 +43,10 @@ export const CommentCard: React.FC<{ comment: Comment }> = ({ comment }) => {
         <Text fontSize={'xs'}>{formatDistance(postedAt, Date.now(), { addSuffix: true })}</Text>
       </Flex>
 
-      <Box whiteSpace={'pre-line'} borderLeft={'1px solid #ddd'} pt={2} ml={'7px'} fontSize={'sm'}>
-        <Text color={'InfoText'}>{commentText}</Text>
+      <Box whiteSpace={'pre-line'} borderLeft={'1px solid #ddd'} pl={2} ml={'7px'} fontSize={'sm'}>
+        <LinkItUrl>
+          <Text color="InfoText">{commentText}</Text>
+        </LinkItUrl>
       </Box>
     </Box>
   );
