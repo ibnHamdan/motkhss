@@ -20,7 +20,12 @@ export const ViewOpportunity = () => {
   const { id: opportunityId } = useParams();
   const { url, method } = ENDPOINT_CONFIGS.getOpportunity;
 
-  const { data, error, isLoading } = useQuery(['viewOpportunity'], () =>
+  const {
+    data,
+    error,
+    isLoading,
+    refetch: refetchOpportunity,
+  } = useQuery(['viewOpportunity'], () =>
     callEndpoint<GetOpportunityRequest, GetOpportunityResponse>(url.replace(':id', opportunityId!), method, {
       opportunityId: opportunityId,
     })
@@ -31,7 +36,7 @@ export const ViewOpportunity = () => {
     data: commentsData,
     error: commentsError,
     isLoading: commentsLoading,
-    refetch,
+    refetch: refetchComments,
   } = useQuery(['listComments'], () =>
     callEndpoint<{}, ListCommentsResponse>(commentsUrl.replace(':opportunityId', opportunityId!), commentsMethod, {})
   );
@@ -45,8 +50,8 @@ export const ViewOpportunity = () => {
       { comment }
     );
     setComment('');
-    refetch();
-  }, [comment, opportunityId, refetch]);
+    refetchComments();
+  }, [comment, opportunityId, refetchComments]);
 
   const opportunityName = isLoading ? 'Loading ...' : error || !data ? 'Error' : data.opportunity.title;
   useDocumentTitle(opportunityName);
@@ -61,7 +66,7 @@ export const ViewOpportunity = () => {
 
   return (
     <Box>
-      <OpportunityCard opportunity={data.opportunity} hideDiscuss />
+      <OpportunityCard opportunity={data.opportunity} refetch={refetchOpportunity} hideDiscuss />
 
       <Box w={'xl'}>
         <hr />

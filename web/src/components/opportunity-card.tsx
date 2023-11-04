@@ -10,45 +10,43 @@ import {
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
-import { BsHeart } from 'react-icons/bs';
-import React from 'react';
+import { BsHeart, BsHeartFill } from 'react-icons/bs';
+import React, { useCallback } from 'react';
 import { formatDistance } from 'date-fns';
 import { isLoggedIn } from '../fetch/auth';
 import { ROUTES } from '../routes';
 
 export const OpportunityCard: React.FC<{
   opportunity: Opportunity;
+  refetch: () => unknown;
   hideDiscuss?: boolean;
-}> = ({ opportunity, hideDiscuss }) => {
-  const { id, url: opportunityUrl, title, userId } = opportunity;
-  const { method: userMethod, url: getUserUrl } = ENDPOINT_CONFIGS.getUser;
-  const {
-    data: user,
-    error,
-    isLoading,
-  } = useQuery([`getUser${userId}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(getUserUrl.replace(':id', userId), userMethod, {})
-  );
-
-  const { method, url } = ENDPOINT_CONFIGS.countComments;
-  const { data: commentsCountRes } = useQuery([`countComments${id}`], () =>
-    callEndpoint<CountCommentsRequest, CountCommentResponse>(url.replace(':opportunityId', id), method, {
-      opportunityId: id,
-    })
-  );
+}> = ({ opportunity, refetch, hideDiscuss }) => {
+  const { id, url: opportunityUrl, title, userId, liked } = opportunity;
+  const { user, error, isLoading } = useGetUser(userId);
+  const { countCommentsRes } = useCountComments(id);
 
   const urlWithProtocol = opportunityUrl.startsWith('http') ? opportunityUrl : 'http://' + opportunityUrl;
   const userName = isLoading || !user ? '...' : error ? '<unknown>' : user.userName;
-  const commentsCount = commentsCountRes?.count ?? '0';
+  const commentsCount = countCommentsRes?.count ?? '0';
+
+  const toggleLike = useCallback(
+    async (opportunityId: string, like: boolean) => {
+      const { method, url } = like ? ENDPOINT_CONFIGS.createLike : ENDPOINT_CONFIGS.deleteLike;
+      console.log('toggleLike', url, opportunityId, like, method);
+      await callEndpoint<{}, {}>(url.replace(':opportunityId', opportunityId), method, {});
+      refetch();
+    },
+    [refetch]
+  );
 
   return (
     <Flex m={4} gap={2} align="baseline">
       {isLoggedIn() && (
-        <Box position="relative" w={4}>
+        <Box position="relative" w={4} onClick={() => toggleLike(id, !liked)}>
           <Icon
             position="absolute"
             top="-0.8rem"
-            as={BsHeart}
+            as={liked ? BsHeartFill : BsHeart}
             fill="gray"
             cursor="pointer"
             _hover={{ fill: 'brown' }}
@@ -58,7 +56,7 @@ export const OpportunityCard: React.FC<{
 
       <Box>
         <Flex align="center">
-          <a href={`/o/${id}`}>
+          <a href={`/o/${id}`} target="_blank" rel="noreferrer">
             <Text color="gray.600" fontWeight="bold" pr={2} style={{ unicodeBidi: 'plaintext' }}>
               {title}
             </Text>
@@ -112,4 +110,26 @@ const getUrlDomain = (url: string): string => {
   } catch {
     return url;
   }
+};
+
+const useGetUser = (userId: string) => {
+  const { method, url } = ENDPOINT_CONFIGS.getUser;
+  const {
+    data: user,
+    error,
+    isLoading,
+  } = useQuery([`getUser${userId}`], () =>
+    callEndpoint<GetUserRequest, GetUserResponse>(url.replace(':id', userId), method, {})
+  );
+  return { user, error, isLoading };
+};
+
+const useCountComments = (opportunityId: string) => {
+  const { method, url } = ENDPOINT_CONFIGS.countComments;
+  const { data: countCommentsRes } = useQuery([`countComments${opportunityId}`], () =>
+    callEndpoint<CountCommentsRequest, CountCommentResponse>(url.replace(':opportunityId', opportunityId), method, {
+      opportunityId,
+    })
+  );
+  return { countCommentsRes };
 };

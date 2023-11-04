@@ -2,10 +2,12 @@ import { ENDPOINT_CONFIGS, ListOpportunitiesRequest, ListOpportunitiesResponse }
 import { useQuery } from 'react-query';
 import { callEndpoint } from '../fetch';
 import { OpportunityCard } from '../components/opportunity-card';
+import { useDocumentTitle } from '../doc-title';
 
 export const ListOpportunities = () => {
+  useDocumentTitle('MOTKHSS | المتخصص');
   const { url, method } = ENDPOINT_CONFIGS.listOpportunities;
-  const { data, error, isLoading } = useQuery(['listOpportunities'], () =>
+  const { data, error, isLoading, refetch } = useQuery(['listOpportunities'], () =>
     callEndpoint<ListOpportunitiesRequest, ListOpportunitiesResponse>(url, method, {})
   );
 
@@ -20,7 +22,7 @@ export const ListOpportunities = () => {
   return (
     <>
       {data?.opportunities.map((opportunity, i) => (
-        <OpportunityCard key={i} opportunity={opportunity} />
+        <OpportunityCard key={i} opportunity={opportunity} refetch={refetch} />
       ))}
     </>
   );

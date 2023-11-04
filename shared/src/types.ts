@@ -13,6 +13,7 @@ export interface Opportunity {
   url: string;
   userId: string;
   postedAt: number;
+  liked?: boolean;
 }
 
 export interface Like {
@@ -26,4 +27,5 @@ export interface Comment {
   opportunityId: string;
   comment: string;
   postedAt: number;
+  liked?: boolean;
 }

@@ -9,7 +9,7 @@ import express, { RequestHandler } from 'express';
 import cors from 'cors';
 import asyncHandler from 'express-async-handler';
 import { OpportunityHandler } from './handlers/opportunityHandler';
-import { authMiddleware } from './middleware/authMiddleware';
+import { enforceJwtMiddlware, jwtParseMiddleware } from './middleware/authMiddleware';
 import { LikeHandler } from './handlers/likeHandler';
 import { CommentHandler } from './handlers/commentHandler';
 import { ENDPOINT_CONFIGS, Endpoints } from '@motkhss/shared';
@@ -42,13 +42,14 @@ export async function createServer(dbPath: string, logRequest: boolean = true) {
     [Endpoints.getUser]: userHandler.get,
     [Endpoints.getCurrentUser]: userHandler.getCurrent,
 
-    [Endpoints.listOpportunities]: opportunityHandler.listOpportunitiesHandler,
-    [Endpoints.getOpportunity]: opportunityHandler.getOpportunityHandler,
-    [Endpoints.createOpportunity]: opportunityHandler.createOpportunityHandler,
-    [Endpoints.deleteOpportunity]: opportunityHandler.deleteOpportunityHandler,
+    [Endpoints.listOpportunities]: opportunityHandler.list,
+    [Endpoints.getOpportunity]: opportunityHandler.get,
+    [Endpoints.createOpportunity]: opportunityHandler.create,
+    [Endpoints.deleteOpportunity]: opportunityHandler.delete,
 
-    [Endpoints.listLikes]: likeHandler.listLikesHandler,
-    [Endpoints.createLike]: likeHandler.createLikeHandler,
+    [Endpoints.listLikes]: likeHandler.list,
+    [Endpoints.createLike]: likeHandler.create,
+    [Endpoints.deleteLike]: likeHandler.delete,
 
     [Endpoints.listComments]: commentHandler.listCommentsHandler,
     [Endpoints.createComment]: commentHandler.createCommentHandler,
@@ -64,7 +65,7 @@ export async function createServer(dbPath: string, logRequest: boolean = true) {
     const handler = HANDLERS[entry as Endpoints];
 
     config.auth
-      ? app[config.method](config.url, authMiddleware, asyncHandler(handler))
+      ? app[config.method](config.url, jwtParseMiddleware, enforceJwtMiddlware, asyncHandler(handler))
       : app[config.method](config.url, asyncHandler(handler));
   });
 

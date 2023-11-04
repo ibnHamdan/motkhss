@@ -19,6 +19,7 @@ export enum Endpoints {
 
   listLikes = 'listLikes',
   createLike = 'createLike',
+  deleteLike = 'deleteLike',
 
   listComments = 'listComments',
   createComment = 'createComment',
@@ -70,10 +71,11 @@ export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
     method: 'get',
   },
   [Endpoints.createLike]: {
-    url: '/api/v1/likes/:opoortunityId',
+    url: '/api/v1/likes/:opportunityId',
     method: 'post',
     auth: true,
   },
+  [Endpoints.deleteLike]: { method: 'delete', url: '/api/v1/likes/:opportunityId', auth: true },
 
   [Endpoints.listComments]: {
     url: '/api/v1/comments/:opportunityId',

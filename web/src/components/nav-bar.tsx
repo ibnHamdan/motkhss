@@ -45,7 +45,7 @@ export const NavBar = () => {
               </Link>
             )}
 
-            <Button size={'sm'} variant={'link'} onClick={onSignout}>
+            <Button size={'sm'} variant={'ghost'} onClick={onSignout}>
               Sign out
             </Button>
           </>

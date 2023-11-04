@@ -27,7 +27,7 @@ export class SqlDataStore implements Datastore {
   }
 
   async createLike(like: Like): Promise<void> {
-    await this.db.run('INSERT INTO likes(userId, postId) VALUES(?,?)', like.userId, like.opportunityId);
+    await this.db.run('INSERT INTO likes(userId, opportunityId) VALUES(?,?)', like.userId, like.opportunityId);
   }
 
   async createUser(user: User): Promise<void> {
@@ -61,6 +61,10 @@ export class SqlDataStore implements Datastore {
     await this.db.run('Delete FROM opportunities WHERE id = ?', id);
   }
 
+  async deleteLike(like: Like): Promise<void> {
+    await this.db.run('DELETE FROM likes WHERE userId = ? AND opportunity = ?', like.userId, like.opportunityId);
+  }
+
   async exists(like: Like): Promise<boolean> {
     let awaitResult = await this.db.get<number>(
       'SELECT 1 FROM likes WHERE opportunityId = ? and userId = ?',
@@ -79,8 +83,13 @@ export class SqlDataStore implements Datastore {
     return result?.count ?? 0;
   }
 
-  async getOpportunity(id: string): Promise<Opportunity | undefined> {
-    return await this.db.get<Opportunity>('SELECT * FROM opportunities WHERE id = ?', id);
+  async getOpportunity(id: string, userId: string): Promise<Opportunity | undefined> {
+    return await this.db.get<Opportunity>(
+      `SELECT *, EXISTS( SELECT 1 FROM likes WHERE likes.opportunityId = ? AND likes.userId = ?) as liked FROM opportunities WHERE id = ?`,
+      id,
+      userId,
+      id
+    );
   }
 
   getUserByEmail(email: string): Promise<User | undefined> {
@@ -102,8 +111,11 @@ export class SqlDataStore implements Datastore {
     );
   }
 
-  listOpportunities(): Promise<Opportunity[]> {
-    return this.db.all<Opportunity[]>(`SELECT * FROM opportunities`);
+  listOpportunities(userId: string): Promise<Opportunity[]> {
+    return this.db.all<Opportunity[]>(
+      `SELECT *, EXISTS( SELECT 1 FROM likes WHERE likes.opportunityId = opportunities.id AND likes.userId = ? ) as liked FROM opportunities ORDER BY postedAT DESC`,
+      userId
+    );
   }
 
   public async openDb(dbPath: string) {

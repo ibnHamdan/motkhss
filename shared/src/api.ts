@@ -31,7 +31,6 @@ export type CountCommentsRequest = { opportunityId: string };
 export type CountCommentResponse = { count: number };
 
 // Like APIs
-export interface CreateLikeResponse {}
 
 export interface ListLikesResponse {
   likes: Number;

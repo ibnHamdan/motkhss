@@ -1,23 +1,19 @@
-import { Like } from '@motkhss/shared';
-import { CreateLikeResponse, ListLikesResponse } from '@motkhss/shared';
+import { Like, ListLikesResponse } from '@motkhss/shared';
 import { Datastore } from '../datastore';
 import { ExpressHandlerWithParams } from '../types';
 
 export class LikeHandler {
   private db: Datastore;
-  public createLikeHandler: ExpressHandlerWithParams<{ postId: string }, null, CreateLikeResponse> = async (
-    req,
-    res
-  ) => {
-    if (!req.params.postId) {
-      return res.status(400).send({ error: 'Post ID missing' });
+  public create: ExpressHandlerWithParams<{ opportunityId: string }, null, {}> = async (req, res) => {
+    if (!req.params.opportunityId) {
+      return res.status(400).send({ error: 'Opportunity ID missing' });
     }
-    if (!(await this.db.getOpportunity(req.params.postId))) {
+    if (!(await this.db.getOpportunity(req.params.opportunityId, res.locals.userId))) {
       return res.status(404).send({ error: 'No post found with this ID' });
     }
 
     let found = await this.db.exists({
-      opportunityId: req.params.postId,
+      opportunityId: req.params.opportunityId,
       userId: res.locals.userId,
     });
     if (found) {
@@ -25,14 +21,14 @@ export class LikeHandler {
     }
 
     const likeForInsert: Like = {
-      opportunityId: req.params.postId,
+      opportunityId: req.params.opportunityId,
       userId: res.locals.userId,
     };
 
     this.db.createLike(likeForInsert);
     return res.sendStatus(200);
   };
-  public listLikesHandler: ExpressHandlerWithParams<{ postId: string }, null, ListLikesResponse> = async (req, res) => {
+  public list: ExpressHandlerWithParams<{ postId: string }, null, ListLikesResponse> = async (req, res) => {
     if (!req.params.postId) {
       return res.status(400).send({ error: 'Post ID missing' });
     }
@@ -43,4 +39,21 @@ export class LikeHandler {
   constructor(db: Datastore) {
     this.db = db;
   }
+
+  public delete: ExpressHandlerWithParams<{ opportunityId: string }, null, {}> = async (req, res) => {
+    if (!req.params.opportunityId) {
+      return res.status(400).send({ error: 'Opportunity ID missign' });
+    }
+    if (!(await this.db.getOpportunity(req.params.opportunityId, res.locals.userId))) {
+      return res.status(404).send({ error: 'No opportunity found with this ID' });
+    }
+
+    const likeForDelete: Like = {
+      opportunityId: req.params.opportunityId,
+      userId: res.locals.userId,
+    };
+
+    this.db.deleteLike(likeForDelete);
+    return res.sendStatus(200);
+  };
 }
