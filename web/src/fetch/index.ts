@@ -1,6 +1,7 @@
 import { QueryClient } from 'react-query';
+import { isDev } from '../util';
 
-const HOST = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://motkhss.com';
+const HOST = isDev ? `http://localhost:${window.location.port}` : 'https://motkhss.com';
 
 export const LOCAL_STORAGE_JWT = 'jwtToken';
 export class ApiError extends Error {
@@ -32,12 +33,15 @@ export async function callEndpoint<Request, Response>(
   method: 'get' | 'post' | 'delete',
   request: Request
 ): Promise<Response> {
+  const jwt = localStorage.getItem(LOCAL_STORAGE_JWT);
   const respone = await fetch(`${HOST}${url}`, {
     method: method,
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_JWT)}`,
-      'Content-Type': 'application/json',
-    },
+    headers: !jwt
+      ? undefined
+      : {
+          Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_JWT)}`,
+          'Content-Type': 'application/json',
+        },
     body: method === 'get' ? undefined : JSON.stringify(request),
   });
   console.log('callEndpoint', url, respone, respone.headers.get('content-type'));

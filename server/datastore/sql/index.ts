@@ -119,10 +119,16 @@ export class SqlDataStore implements Datastore {
   }
 
   public async openDb(dbPath: string) {
-    this.db = await open({
-      filename: path.join(__dirname, 'motkhss.sqlite'),
-      driver: sqlite3.Database,
-    });
+    try {
+      console.log('Opening database file at: ', dbPath);
+      this.db = await open({
+        filename: dbPath,
+        driver: sqlite3.Database,
+        mode: sqlite3.OPEN_READWRITE,
+      });
+    } catch (e) {
+      console.error('Failed to open database at path:', dbPath, 'err:', e);
+    }
 
     this.db.run('PRAGMA foreign_keys = ON;');
 
