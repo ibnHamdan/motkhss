@@ -23,7 +23,7 @@ jobs:
         run: |
           cd server
           npm install
-          touch datastore/sql/motkhss.sqlite
+          touch src/datastore/sql/motkhss.sqlite
       - name: restart server
         env:
           JWT_SECRET : ${{ secrets.JWT_SECRET }}
