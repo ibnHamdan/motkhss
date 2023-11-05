@@ -16,14 +16,16 @@ export const App = () => {
       <Box h={'100vh'}>
         <BrowserRouter>
           <NavBar />
-          <Routes>
-            <Route path={ROUTES.HOME} element={<ListOpportunities />} />
-            <Route path={ROUTES.VIEW_OPPORTUNITY(':id')} element={<ViewOpportunity />} />
-            <Route path={ROUTES.NEW_OPPORTUNITY} element={<NewOpprtunity />} />
-            <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
-            <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
-            <Route path={ROUTES.USER_PORFIEL(':id')} element={<UserProfile />} />
-          </Routes>
+          <Box m={4}>
+            <Routes>
+              <Route path={ROUTES.HOME} element={<ListOpportunities />} />
+              <Route path={ROUTES.VIEW_OPPORTUNITY(':id')} element={<ViewOpportunity />} />
+              <Route path={ROUTES.NEW_OPPORTUNITY} element={<NewOpprtunity />} />
+              <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
+              <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+              <Route path={ROUTES.USER_PORFIEL(':id')} element={<UserProfile />} />
+            </Routes>
+          </Box>
           {/* Opportunities: {!!data?.opportunities && <div>{JSON.stringify(data.opportunities)}</div>} */}
         </BrowserRouter>
         {isDev && (

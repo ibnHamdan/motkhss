@@ -2,7 +2,6 @@ import { /*db,*/ db, initDB } from './datastore';
 
 import { requestLoggerMiddleware } from './middleware/loggerMiddleware';
 import { errHandler } from './middleware/errorrMiddleware';
-import dotenv from 'dotenv';
 import https from 'https';
 import fs from 'fs';
 import express, { RequestHandler } from 'express';
@@ -20,14 +19,12 @@ import { UserHandler } from './handlers/userHandler';
 export async function createServer(dbPath: string, logRequest: boolean = true) {
   await initDB(dbPath);
 
-  dotenv.config();
-
   const app = express();
 
   app.use(express.json());
   app.use(cors());
 
-  app.use('/', express.static(path.join(__dirname, '../web/build')));
+  app.use('/', express.static(path.join(__dirname, '../../web/build')));
 
   if (logRequest) {
     app.use(requestLoggerMiddleware);

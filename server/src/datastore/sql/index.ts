@@ -3,6 +3,7 @@ import sqlite3 from 'sqlite3';
 import path from 'path';
 import { Datastore } from '..';
 import { User, Opportunity, Like, Comment } from '@motkhss/shared';
+import { SEED_OPPORTUNITY, SEED_USERS } from './seeds';
 
 export class SqlDataStore implements Datastore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
@@ -123,6 +124,7 @@ export class SqlDataStore implements Datastore {
   }
 
   public async openDb(dbPath: string) {
+    const { ENV } = process.env;
     try {
       console.log('Opening database file at: ', dbPath);
       this.db = await open({
@@ -139,6 +141,17 @@ export class SqlDataStore implements Datastore {
     await this.db.migrate({
       migrationsPath: path.join(__dirname, 'migrations'),
     });
+
+    console.log(process.env.ENV);
+    if (ENV === 'development') {
+      console.log('Seeding data ...');
+      SEED_USERS.forEach(async (u) => {
+        if (!(await this.getUserById(u.id))) await this.createUser(u);
+      });
+      SEED_OPPORTUNITY.forEach(async (p) => {
+        if (!(await this.getOpportunityByUrl(p.url))) await this.creatOpportunity(p);
+      });
+    }
 
     return this;
   }
