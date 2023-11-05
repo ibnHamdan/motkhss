@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Icon, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Text, useToast } from '@chakra-ui/react';
 import {
   CountCommentResponse,
   CountCommentsRequest,
@@ -26,6 +26,8 @@ export const OpportunityCard: React.FC<{
   const { user, error, isLoading } = useGetUser(userId);
   const { countCommentsRes } = useCountComments(id);
 
+  const toast = useToast();
+
   const urlWithProtocol = opportunityUrl.startsWith('http') ? opportunityUrl : 'http://' + opportunityUrl;
   const userName = isLoading || !user ? '...' : error ? '<unknown>' : user.userName;
   const commentsCount = countCommentsRes?.count ?? '0';
@@ -33,7 +35,19 @@ export const OpportunityCard: React.FC<{
   const toggleLike = useCallback(
     async (opportunityId: string, like: boolean) => {
       const endpoint = like ? ENDPOINT_CONFIGS.createLike : ENDPOINT_CONFIGS.deleteLike;
-      await callEndpoint<{}, {}>(withParams(endpoint, opportunityId));
+      try {
+        await callEndpoint<{}, {}>(withParams(endpoint, opportunityId));
+      } catch (e) {
+        console.log(e);
+        return toast({
+          position: 'top',
+          render: () => (
+            <Box color="white" p={3} bg="red.500">
+              Error
+            </Box>
+          ),
+        });
+      }
       refetch();
     },
     [refetch]

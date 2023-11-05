@@ -8,6 +8,7 @@ export function signJwt(obj: JwtObject): string {
   });
 }
 
+// Throws one of VerifyErrors on bad tokens
 export function verifyJwt(token: string): JwtObject {
   return jwt.verify(token, getJwtSecret()) as JwtObject;
 }

@@ -1,7 +1,7 @@
 import { QueryClient } from 'react-query';
 import { isDev } from '../util';
-import { EndpointConfig } from '@motkhss/shared';
-import { getLocalStorageJWT, isLoggedIn } from './auth';
+import { ERRORS, EndpointConfig } from '@motkhss/shared';
+import { getLocalStorageJWT, isLoggedIn, signOut } from './auth';
 
 const HOST = isDev ? `http://localhost:${window.location.port}` : 'https://motkhss.com';
 
@@ -48,6 +48,10 @@ export async function callEndpoint<Request, Response>(endpoint: EndpointConfig, 
     let msg = '';
     try {
       msg = (await respone.json()).error;
+      if (msg === ERRORS.TOKEN_EXPIRED) {
+        signOut();
+        window.location.reload();
+      }
     } finally {
       throw new ApiError(respone.status, msg);
     }

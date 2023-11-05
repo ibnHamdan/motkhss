@@ -4,6 +4,7 @@ import {
   CreateCommentRequest,
   CreateCommentResponse,
   DeleteCommentResponse,
+  ERRORS,
   ListCommentsResponse,
 } from '@motkhss/shared';
 import { Datastore } from '../datastore';
@@ -20,41 +21,32 @@ export class CommentHandler {
     const count = await this.db.countComment(req.params.opportunityId);
     return res.send({ count });
   };
-  public createCommentHandler: ExpressHandlerWithParams<
-    { opportunityId: string },
-    CreateCommentRequest,
-    CreateCommentResponse
-  > = async (req, res) => {
-    if (!req.params.opportunityId) return res.status(400).send({ error: 'opportunity ID is missing' });
-    if (!req.body.comment) return res.status(400).send({ error: 'Comment is missing' });
+  public create: ExpressHandlerWithParams<{ opportunityId: string }, CreateCommentRequest, CreateCommentResponse> =
+    async (req, res) => {
+      if (!req.params.opportunityId) return res.status(400).send({ error: ERRORS.OPPORTUNITY_ID_MISSING });
+      if (!req.body.comment) return res.status(400).send({ error: ERRORS.COMMENT_ID_MISSING });
 
-    if (!(await this.db.getOpportunity(req.params.opportunityId, res.locals.userId))) {
-      return res.status(404).send({ error: 'No opportunity found with this ID' });
-    }
-    const commentForInsertion: Comment = {
-      id: crypto.randomUUID(),
-      postedAt: Date.now(),
-      opportunityId: req.params.opportunityId,
-      userId: res.locals.userId,
-      comment: req.body.comment,
+      if (!(await this.db.getOpportunity(req.params.opportunityId, res.locals.userId))) {
+        return res.status(404).send({ error: ERRORS.OPPORTUNITY_NOT_FOUND });
+      }
+      const commentForInsertion: Comment = {
+        id: crypto.randomUUID(),
+        postedAt: Date.now(),
+        opportunityId: req.params.opportunityId,
+        userId: res.locals.userId,
+        comment: req.body.comment,
+      };
+      await this.db.createComment(commentForInsertion);
+      return res.sendStatus(200);
     };
-    await this.db.createComment(commentForInsertion);
-    return res.sendStatus(200);
-  };
-  public deleteCommentHandler: ExpressHandlerWithParams<{ id: string }, null, DeleteCommentResponse> = async (
-    req,
-    res
-  ) => {
-    if (!req.params.id) return res.status(404).send({ error: 'No Comment Id' });
+  public delete: ExpressHandlerWithParams<{ id: string }, null, DeleteCommentResponse> = async (req, res) => {
+    if (!req.params.id) return res.status(404).send({ error: ERRORS.COMMENT_ID_MISSING });
     await this.db.deleteComment(req.params.id);
     return res.sendStatus(200);
   };
-  public listCommentsHandler: ExpressHandlerWithParams<{ opportunityId: string }, null, ListCommentsResponse> = async (
-    req,
-    res
-  ) => {
+  public list: ExpressHandlerWithParams<{ opportunityId: string }, null, ListCommentsResponse> = async (req, res) => {
     if (!req.params.opportunityId) {
-      return res.status(400).send({ error: 'opportunity ID missing' });
+      return res.status(400).send({ error: ERRORS.OPPORTUNITY_ID_MISSING });
     }
 
     const comments = await this.db.listComments(req.params.opportunityId);

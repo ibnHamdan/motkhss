@@ -1,4 +1,4 @@
-import { Like, ListLikesResponse } from '@motkhss/shared';
+import { ERRORS, Like, ListLikesResponse } from '@motkhss/shared';
 import { Datastore } from '../datastore';
 import { ExpressHandlerWithParams } from '../types';
 
@@ -6,10 +6,10 @@ export class LikeHandler {
   private db: Datastore;
   public create: ExpressHandlerWithParams<{ opportunityId: string }, null, {}> = async (req, res) => {
     if (!req.params.opportunityId) {
-      return res.status(400).send({ error: 'Opportunity ID missing' });
+      return res.status(400).send({ error: ERRORS.OPPORTUNITY_ID_MISSING });
     }
     if (!(await this.db.getOpportunity(req.params.opportunityId, res.locals.userId))) {
-      return res.status(404).send({ error: 'No post found with this ID' });
+      return res.status(404).send({ error: ERRORS.OPPORTUNITY_NOT_FOUND });
     }
 
     let found = await this.db.exists({
@@ -17,7 +17,7 @@ export class LikeHandler {
       userId: res.locals.userId,
     });
     if (found) {
-      return res.status(400).send({ error: 'No more likes for same post, same userid' });
+      return res.status(400).send({ error: ERRORS.DUPLICATE_LIKE });
     }
 
     const likeForInsert: Like = {
@@ -30,7 +30,7 @@ export class LikeHandler {
   };
   public list: ExpressHandlerWithParams<{ postId: string }, null, ListLikesResponse> = async (req, res) => {
     if (!req.params.postId) {
-      return res.status(400).send({ error: 'Post ID missing' });
+      return res.status(400).send({ error: ERRORS.OPPORTUNITY_ID_MISSING });
     }
     const count: Number = await this.db.getLikes(req.params.postId);
     return res.send({ likes: count });
@@ -42,10 +42,10 @@ export class LikeHandler {
 
   public delete: ExpressHandlerWithParams<{ opportunityId: string }, null, {}> = async (req, res) => {
     if (!req.params.opportunityId) {
-      return res.status(400).send({ error: 'Opportunity ID missign' });
+      return res.status(400).send({ error: ERRORS.OPPORTUNITY_ID_MISSING });
     }
     if (!(await this.db.getOpportunity(req.params.opportunityId, res.locals.userId))) {
-      return res.status(404).send({ error: 'No opportunity found with this ID' });
+      return res.status(404).send({ error: ERRORS.OPPORTUNITY_NOT_FOUND });
     }
 
     const likeForDelete: Like = {
