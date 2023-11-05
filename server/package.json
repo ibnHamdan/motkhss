@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon index.ts",
-    "start:prod": "pm2 delete motkhss; pm2 start --name motkhss \"npx ts-node --transpile-only index.ts\"",
+    "start": "nodemon src/index.ts",
+    "start:prod": "pm2 delete motkhss; pm2 start --name motkhss \"npx ts-node --transpile-only src/index.ts\"",
     "test": "jest",
     "test:watch": "jest --watch"
   },
