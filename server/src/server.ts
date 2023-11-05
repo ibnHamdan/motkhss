@@ -13,7 +13,7 @@ import { LikeHandler } from './handlers/likeHandler';
 import { CommentHandler } from './handlers/commentHandler';
 import { ENDPOINT_CONFIGS, Endpoints } from '@motkhss/shared';
 import http from 'http';
-import path from 'path';
+
 import { UserHandler } from './handlers/userHandler';
 
 export async function createServer(dbPath: string, logRequest: boolean = true) {
@@ -23,8 +23,6 @@ export async function createServer(dbPath: string, logRequest: boolean = true) {
 
   app.use(express.json());
   app.use(cors());
-
-  app.use('/', express.static(path.join(__dirname, '../../web/build')));
 
   if (logRequest) {
     app.use(requestLoggerMiddleware);

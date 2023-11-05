@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import React, { useCallback } from 'react';
-import { formatDistance } from 'date-fns';
+import formatDistance from 'date-fns/formatDistance';
 import { isLoggedIn } from '../fetch/auth';
 import { ROUTES } from '../routes';
 

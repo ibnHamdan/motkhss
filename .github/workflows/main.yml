@@ -12,9 +12,19 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - name: Deploy and restart web server
+
+      - name: checkout repo+branch
+        uses: actions/Checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: install and build server
+        run: |
+          cd server
+          npm install
+          touch datastore/sql/motkhss.sqlite
+      - name: restart server
         env:
           JWT_SECRET : ${{ secrets.JWT_SECRET }}
           PASSWORD_SALT: ${{ secrets.PASSWORD_SALT}}
@@ -22,5 +32,4 @@ jobs:
           ENV: ${{ secrets.ENV}}
         run: |
           cd server
-          npm install
           npm run start:prod

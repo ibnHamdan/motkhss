@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { callEndpoint } from '../fetch';
 import { Box, Flex, Icon, SkeletonText, Text } from '@chakra-ui/react';
 import { BsHeart } from 'react-icons/bs';
-import { formatDistance } from 'date-fns';
+import formatDistance from 'date-fns/formatDistance';
 import { LinkItUrl } from 'react-linkify-it';
 import { isLoggedIn } from '../fetch/auth';
 import { Link } from 'react-router-dom';
