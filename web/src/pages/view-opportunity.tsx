@@ -5,6 +5,7 @@ import {
   GetOpportunityRequest,
   GetOpportunityResponse,
   ListCommentsResponse,
+  withParams,
 } from '@motkhss/shared';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -18,7 +19,6 @@ import { CommentCard } from '../components/comment-card';
 
 export const ViewOpportunity = () => {
   const { id: opportunityId } = useParams();
-  const { url, method } = ENDPOINT_CONFIGS.getOpportunity;
 
   const {
     data,
@@ -26,27 +26,24 @@ export const ViewOpportunity = () => {
     isLoading,
     refetch: refetchOpportunity,
   } = useQuery(['viewOpportunity'], () =>
-    callEndpoint<GetOpportunityRequest, GetOpportunityResponse>(url.replace(':id', opportunityId!), method, {
-      opportunityId: opportunityId,
-    })
+    callEndpoint<GetOpportunityRequest, GetOpportunityResponse>(
+      withParams(ENDPOINT_CONFIGS.getOpportunity, opportunityId!)
+    )
   );
 
-  const { url: commentsUrl, method: commentsMethod } = ENDPOINT_CONFIGS.listComments;
   const {
     data: commentsData,
     error: commentsError,
     isLoading: commentsLoading,
     refetch: refetchComments,
   } = useQuery(['listComments'], () =>
-    callEndpoint<{}, ListCommentsResponse>(commentsUrl.replace(':opportunityId', opportunityId!), commentsMethod, {})
+    callEndpoint<{}, ListCommentsResponse>(withParams(ENDPOINT_CONFIGS.listComments, opportunityId!))
   );
 
   const [comment, setComment] = useState('');
   const submitComment = useCallback(async () => {
-    const { method, url } = ENDPOINT_CONFIGS.createComment;
     await callEndpoint<CreateCommentRequest, CreateCommentResponse>(
-      url.replace(':opportunityId', opportunityId!),
-      method,
+      withParams(ENDPOINT_CONFIGS.createComment, opportunityId!),
       { comment }
     );
     setComment('');

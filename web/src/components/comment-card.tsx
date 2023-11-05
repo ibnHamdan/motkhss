@@ -1,4 +1,4 @@
-import { Comment, ENDPOINT_CONFIGS, GetUserRequest, GetUserResponse } from '@motkhss/shared';
+import { Comment, ENDPOINT_CONFIGS, GetUserRequest, GetUserResponse, withParams } from '@motkhss/shared';
 import React from 'react';
 import { useQuery } from 'react-query';
 import { callEndpoint } from '../fetch';
@@ -12,14 +12,13 @@ import { ROUTES } from '../routes';
 
 export const CommentCard: React.FC<{ comment: Comment }> = ({ comment }) => {
   const { comment: commentText, postedAt, userId } = comment;
-  const { method: getUserMethod, url: getUserUrl } = ENDPOINT_CONFIGS.getUser;
 
   const {
     data: user,
     error,
     isLoading,
-  } = useQuery([`getUser${userId}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(getUserUrl.replace(':id', userId), getUserMethod, {})
+  } = useQuery([`getuser${userId}`], () =>
+    callEndpoint<GetUserRequest, GetUserResponse>(withParams(ENDPOINT_CONFIGS.getUser, userId))
   );
 
   const userName =

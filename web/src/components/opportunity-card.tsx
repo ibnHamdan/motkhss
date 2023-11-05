@@ -6,6 +6,7 @@ import {
   GetUserRequest,
   GetUserResponse,
   Opportunity,
+  withParams,
 } from '@motkhss/shared';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
@@ -31,9 +32,8 @@ export const OpportunityCard: React.FC<{
 
   const toggleLike = useCallback(
     async (opportunityId: string, like: boolean) => {
-      const { method, url } = like ? ENDPOINT_CONFIGS.createLike : ENDPOINT_CONFIGS.deleteLike;
-      console.log('toggleLike', url, opportunityId, like, method);
-      await callEndpoint<{}, {}>(url.replace(':opportunityId', opportunityId), method, {});
+      const endpoint = like ? ENDPOINT_CONFIGS.createLike : ENDPOINT_CONFIGS.deleteLike;
+      await callEndpoint<{}, {}>(withParams(endpoint, opportunityId));
       refetch();
     },
     [refetch]
@@ -113,23 +113,19 @@ const getUrlDomain = (url: string): string => {
 };
 
 const useGetUser = (userId: string) => {
-  const { method, url } = ENDPOINT_CONFIGS.getUser;
   const {
     data: user,
     error,
     isLoading,
   } = useQuery([`getUser${userId}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(url.replace(':id', userId), method, {})
+    callEndpoint<GetUserRequest, GetUserResponse>(withParams(ENDPOINT_CONFIGS.getUser, userId))
   );
   return { user, error, isLoading };
 };
 
 const useCountComments = (opportunityId: string) => {
-  const { method, url } = ENDPOINT_CONFIGS.countComments;
   const { data: countCommentsRes } = useQuery([`countComments${opportunityId}`], () =>
-    callEndpoint<CountCommentsRequest, CountCommentResponse>(url.replace(':opportunityId', opportunityId), method, {
-      opportunityId,
-    })
+    callEndpoint<CountCommentsRequest, CountCommentResponse>(withParams(ENDPOINT_CONFIGS.countComments, opportunityId))
   );
   return { countCommentsRes };
 };

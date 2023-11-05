@@ -25,8 +25,10 @@ export const NewOpprtunity = () => {
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       try {
-        const { method, url: apiUrl } = ENDPOINT_CONFIGS.createOpportunity;
-        await callEndpoint<CreateOpportunityRequest, CreateOpportunityResponse>(apiUrl, method, { title, url });
+        await callEndpoint<CreateOpportunityRequest, CreateOpportunityResponse>(ENDPOINT_CONFIGS.createOpportunity, {
+          title,
+          url,
+        });
         navigate(ROUTES.HOME);
       } catch (e) {
         setError((e as ApiError).message);

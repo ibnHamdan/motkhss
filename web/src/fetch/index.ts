@@ -1,9 +1,10 @@
 import { QueryClient } from 'react-query';
 import { isDev } from '../util';
+import { EndpointConfig } from '@motkhss/shared';
+import { getLocalStorageJWT, isLoggedIn } from './auth';
 
 const HOST = isDev ? `http://localhost:${window.location.port}` : 'https://motkhss.com';
 
-export const LOCAL_STORAGE_JWT = 'jwtToken';
 export class ApiError extends Error {
   public status: number;
 
@@ -28,23 +29,21 @@ export const queryClient = new QueryClient({
   },
 });
 
-export async function callEndpoint<Request, Response>(
-  url: string,
-  method: 'get' | 'post' | 'delete',
-  request: Request
-): Promise<Response> {
-  const jwt = localStorage.getItem(LOCAL_STORAGE_JWT);
+export async function callEndpoint<Request, Response>(endpoint: EndpointConfig, request?: Request): Promise<Response> {
+  const { url, method, auth } = endpoint;
+  const requestBody = request ? JSON.stringify(request) : undefined;
+
   const respone = await fetch(`${HOST}${url}`, {
     method: method,
-    headers: !jwt
-      ? undefined
-      : {
-          Authorization: `Bearer ${localStorage.getItem(LOCAL_STORAGE_JWT)}`,
-          'Content-Type': 'application/json',
-        },
-    body: method === 'get' ? undefined : JSON.stringify(request),
+    headers: {
+      'Content-Type': 'application/json',
+      /// We include an Authorization header when it's explicitly required or
+      // when the user is logged in.
+      ...((auth || isLoggedIn()) && { Authorization: `Bearer ${getLocalStorageJWT()}` }),
+    },
+    body: requestBody,
   });
-  console.log('callEndpoint', url, respone, respone.headers.get('content-type'));
+  //console.log('callEndpoint', url, respone, respone.headers.get('content-type'));
   if (!respone.ok) {
     let msg = '';
     try {

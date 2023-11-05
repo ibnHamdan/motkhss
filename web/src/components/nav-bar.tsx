@@ -3,21 +3,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../routes';
 import { isLoggedIn, signOut } from '../fetch/auth';
 import { useCallback } from 'react';
-import { ENDPOINT_CONFIGS, GetCurrentUserRequest, GetCurrentUserResponse } from '@motkhss/shared';
+import { ENDPOINT_CONFIGS, GetCurrentUserRequest, GetCurrentUserResponse, withParams } from '@motkhss/shared';
 import { useQuery } from 'react-query';
 import { callEndpoint } from '../fetch';
 
 export const NavBar = () => {
   const navigate = useNavigate();
   const onSignout = useCallback(() => {
+    console.log('onSignOUt ....... ');
     signOut();
     navigate(ROUTES.HOME);
   }, [navigate]);
 
-  const { method, url } = ENDPOINT_CONFIGS.getCurrentUser;
   const { data: currentUser } = useQuery(
     ['getCurrentUser'],
-    () => callEndpoint<GetCurrentUserRequest, GetCurrentUserResponse>(url, method, {}),
+    () => callEndpoint<GetCurrentUserRequest, GetCurrentUserResponse>(ENDPOINT_CONFIGS.getCurrentUser),
     {
       enabled: isLoggedIn(),
     }
@@ -26,7 +26,7 @@ export const NavBar = () => {
   return (
     <Flex py={4} px={10} align={'center'} justify={'space-between'} h={16}>
       <Link to={ROUTES.HOME}>
-        <Text>MOTKHSS</Text>
+        <Text>MOTKHSS | المتخصص</Text>
       </Link>
 
       <Flex gap={5} align={'center'}>

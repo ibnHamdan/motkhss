@@ -1,4 +1,4 @@
-import { ENDPOINT_CONFIGS, GetUserRequest, GetUserResponse } from '@motkhss/shared';
+import { ENDPOINT_CONFIGS, GetUserRequest, GetUserResponse, withParams } from '@motkhss/shared';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
@@ -6,13 +6,12 @@ import { Box, Flex, SkeletonText, Text } from '@chakra-ui/react';
 
 export const UserProfile = () => {
   const { id } = useParams();
-  const { url, method } = ENDPOINT_CONFIGS.getUser;
   const {
     data: user,
     error,
     isLoading,
   } = useQuery([`getuser${id}`], () =>
-    callEndpoint<GetUserRequest, GetUserResponse>(url.replace(':id', id!), method, {})
+    callEndpoint<GetUserRequest, GetUserResponse>(withParams(ENDPOINT_CONFIGS.getUser, id!))
   );
 
   if (isLoading) {

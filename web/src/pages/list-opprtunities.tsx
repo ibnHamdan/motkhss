@@ -6,9 +6,9 @@ import { useDocumentTitle } from '../doc-title';
 
 export const ListOpportunities = () => {
   useDocumentTitle('MOTKHSS | المتخصص');
-  const { url, method } = ENDPOINT_CONFIGS.listOpportunities;
+
   const { data, error, isLoading, refetch } = useQuery(['listOpportunities'], () =>
-    callEndpoint<ListOpportunitiesRequest, ListOpportunitiesResponse>(url, method, {})
+    callEndpoint<ListOpportunitiesRequest, ListOpportunitiesResponse>(ENDPOINT_CONFIGS.listOpportunities)
   );
 
   if (isLoading) {
