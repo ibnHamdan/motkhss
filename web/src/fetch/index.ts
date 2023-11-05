@@ -1,4 +1,4 @@
-import { QueryClient } from 'react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { isDev } from '../util';
 import { ERRORS, EndpointConfig } from '@motkhss/shared';
 import { getLocalStorageJWT, isLoggedIn, signOut } from './auth';
@@ -17,6 +17,7 @@ export class ApiError extends Error {
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      networkMode: 'offlineFirst',
       retry(failureCount, error) {
         const { status } = error as ApiError;
         if (typeof status !== 'number') {

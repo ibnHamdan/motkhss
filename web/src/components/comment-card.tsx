@@ -1,6 +1,6 @@
 import { Comment, ENDPOINT_CONFIGS, GetUserRequest, GetUserResponse, withParams } from '@motkhss/shared';
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { callEndpoint } from '../fetch';
 import { Box, Flex, Icon, SkeletonText, Text } from '@chakra-ui/react';
 import { BsHeart } from 'react-icons/bs';

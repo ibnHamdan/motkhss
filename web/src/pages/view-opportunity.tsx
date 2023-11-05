@@ -7,7 +7,7 @@ import {
   ListCommentsResponse,
   withParams,
 } from '@motkhss/shared';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
 import { useCallback, useState } from 'react';

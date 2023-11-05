@@ -1,5 +1,5 @@
 import { ENDPOINT_CONFIGS, GetUserRequest, GetUserResponse, withParams } from '@motkhss/shared';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
 import { Box, Flex, SkeletonText, Text } from '@chakra-ui/react';

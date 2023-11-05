@@ -4,7 +4,7 @@ import { ROUTES } from '../routes';
 import { isLoggedIn, signOut } from '../fetch/auth';
 import { useCallback } from 'react';
 import { ENDPOINT_CONFIGS, GetCurrentUserRequest, GetCurrentUserResponse } from '@motkhss/shared';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { callEndpoint } from '../fetch';
 
 export const NavBar = () => {

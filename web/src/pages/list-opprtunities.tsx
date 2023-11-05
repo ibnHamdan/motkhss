@@ -1,5 +1,5 @@
 import { ENDPOINT_CONFIGS, ListOpportunitiesRequest, ListOpportunitiesResponse } from '@motkhss/shared';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { callEndpoint } from '../fetch';
 import { OpportunityCard } from '../components/opportunity-card';
 import { useDocumentTitle } from '../doc-title';

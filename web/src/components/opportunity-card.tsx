@@ -8,7 +8,7 @@ import {
   Opportunity,
   withParams,
 } from '@motkhss/shared';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { callEndpoint } from '../fetch';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
