@@ -2,8 +2,6 @@ import { /*db,*/ db, initDB } from './datastore';
 
 import { requestLoggerMiddleware } from './middleware/loggerMiddleware';
 import { errHandler } from './middleware/errorrMiddleware';
-import https from 'https';
-import fs from 'fs';
 import express, { RequestHandler } from 'express';
 import cors from 'cors';
 import asyncHandler from 'express-async-handler';
@@ -12,8 +10,6 @@ import { enforceJwtMiddlware, jwtParseMiddleware } from './middleware/authMiddle
 import { LikeHandler } from './handlers/likeHandler';
 import { CommentHandler } from './handlers/commentHandler';
 import { ENDPOINT_CONFIGS, Endpoints } from '@motkhss/shared';
-import http from 'http';
-
 import { UserHandler } from './handlers/userHandler';
 
 export async function createServer(dbPath: string, logRequest: boolean = true) {
@@ -71,12 +67,14 @@ export async function createServer(dbPath: string, logRequest: boolean = true) {
 
   const { ENV } = process.env;
 
-  if (ENV === 'production') {
-    const key = fs.readFileSync('/home/motkhss-user/certs/motkhss.com/privkey.pem', 'utf-8');
-    const cert = fs.readFileSync('/home/motkhss-user/certs/motkhss.com/cert.pem', 'utf-8');
+  // if (ENV === 'production') {
+  //   const key = fs.readFileSync('/home/motkhss-user/certs/motkhss.com/privkey.pem', 'utf-8');
+  //   const cert = fs.readFileSync('/home/motkhss-user/certs/motkhss.com/cert.pem', 'utf-8');
 
-    return https.createServer({ key, cert }, app);
-  } else {
-    return http.createServer(app);
-  }
+  //   return https.createServer({ key, cert }, app);
+  // } else {
+  //   return http.createServer(app);
+  // }
+
+  return app;
 }

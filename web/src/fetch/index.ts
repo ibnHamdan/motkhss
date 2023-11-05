@@ -3,7 +3,7 @@ import { isDev } from '../util';
 import { ERRORS, EndpointConfig } from '@motkhss/shared';
 import { getLocalStorageJWT, isLoggedIn, signOut } from './auth';
 
-const HOST = isDev ? `http://localhost:${window.location.port}` : 'https://motkhss.com';
+const API_HOST = isDev ? `http://localhost:${window.location.port}` : 'https://motkhss.com';
 
 export class ApiError extends Error {
   public status: number;
@@ -34,7 +34,7 @@ export async function callEndpoint<Request, Response>(endpoint: EndpointConfig, 
   const { url, method, auth } = endpoint;
   const requestBody = request ? JSON.stringify(request) : undefined;
 
-  const respone = await fetch(`${HOST}${url}`, {
+  const respone = await fetch(`${API_HOST}${url}`, {
     method: method,
     headers: {
       'Content-Type': 'application/json',
