@@ -9,6 +9,7 @@ export enum ERRORS {
 
   OPPORTUNITY_ID_MISSING = 'Opportunity ID is missing',
   OPPORTUNITY_NOT_FOUND = 'Opportunity not found',
+  DUPLICATE_URL = 'A opportunity with this URL already Exists',
 
   COMMENT_MISSING = 'Comment is missing',
   COMMENT_ID_MISSING = 'Comment ID is missing',

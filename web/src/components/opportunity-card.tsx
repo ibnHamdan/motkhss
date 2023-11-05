@@ -50,7 +50,7 @@ export const OpportunityCard: React.FC<{
       }
       refetch();
     },
-    [refetch]
+    [refetch, toast]
   );
 
   return (

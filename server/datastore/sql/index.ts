@@ -92,6 +92,10 @@ export class SqlDataStore implements Datastore {
     );
   }
 
+  async getOpportunityByUrl(url: string): Promise<Opportunity | undefined> {
+    return await this.db.get<Opportunity>(`SELECT * FROM opportunities WHERE url = ?`, url);
+  }
+
   getUserByEmail(email: string): Promise<User | undefined> {
     return this.db.get(`SELECT * FROM users WHERE email = ?`, email);
   }

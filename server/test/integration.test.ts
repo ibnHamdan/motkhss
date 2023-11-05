@@ -85,6 +85,25 @@ describe('integration test', () => {
       expect(opportunity.body.opportunity.url).toBe(postUrl);
     }
   });
+  it('fails to create post with duplicate URL', async () => {
+    const postUrl = 'unique-post.com';
+
+    {
+      const { method, url } = ENDPOINT_CONFIGS.createOpportunity;
+      await client[method](url)
+        .send({ title: 'first post', url: postUrl })
+        .set(await getAuthToken())
+        .expect(200);
+    }
+
+    {
+      const { method, url } = ENDPOINT_CONFIGS.createOpportunity;
+      await client[method](url)
+        .send({ title: 'second post', url: postUrl })
+        .set(await getAuthToken())
+        .expect(400);
+    }
+  });
 
   it('likes first opportunity, cannot like twice', async () => {
     const postId = await get1stOopportunity();

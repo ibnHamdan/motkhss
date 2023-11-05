@@ -7,6 +7,7 @@ import {
   GetOpportunityResponse,
   ListOpportunitiesRequest,
   ListOpportunitiesResponse,
+  ERRORS,
 } from '@motkhss/shared';
 import { Datastore } from '../datastore';
 import { ExpressHandler, ExpressHandlerWithParams } from '../types';
@@ -20,6 +21,11 @@ export class OpportunityHandler {
 
     // TODO: VALIDATE USER EXISTS
     // TODO: validate title and url is not empty,
+
+    const existing = await this.db.getOpportunityByUrl(req.body.url);
+    if (existing) {
+      return res.status(400).send({ error: ERRORS.DUPLICATE_URL });
+    }
 
     const opportunity = {
       id: crypto.randomUUID(),
