@@ -1,5 +1,3 @@
-import path from 'path';
-
 import { createServer } from './server';
 import dotenv from 'dotenv';
 
@@ -8,6 +6,7 @@ import dotenv from 'dotenv';
   dotenv.config();
 
   const { ENV, PORT, DB_PATH } = process.env;
+  console.log(ENV, PORT, DB_PATH);
   if (!ENV || !PORT || !DB_PATH) {
     console.error('Missing some required env vars');
     process.exit(1);

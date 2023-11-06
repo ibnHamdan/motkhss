@@ -66,6 +66,9 @@ export async function createServer(dbPath: string, logRequest: boolean = true) {
   app.use(errHandler);
 
   const { ENV } = process.env;
+  if (!ENV) {
+    throw 'Environment not defined, make sure to pass in env vars or have a .env file at root.';
+  }
 
   // if (ENV === 'production') {
   //   const key = fs.readFileSync('/home/motkhss-user/certs/motkhss.com/privkey.pem', 'utf-8');
