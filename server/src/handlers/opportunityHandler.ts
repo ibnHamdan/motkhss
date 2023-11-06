@@ -11,6 +11,7 @@ import {
 } from '@motkhss/shared';
 import { Datastore } from '../datastore';
 import { ExpressHandler, ExpressHandlerWithParams } from '../types';
+import crypto from 'crypto';
 
 export class OpportunityHandler {
   private db: Datastore;
