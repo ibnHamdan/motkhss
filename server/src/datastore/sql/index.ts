@@ -8,6 +8,45 @@ import { SEED_OPPORTUNITY, SEED_USERS } from './seeds';
 export class SqlDataStore implements Datastore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
 
+  public async openDb(dbPath: string) {
+    const { ENV } = process.env;
+
+    if (ENV === 'development') {
+      dbPath = path.join(__dirname, dbPath);
+    }
+
+    try {
+      console.log('Opening database file at: ', dbPath);
+      this.db = await open({
+        filename: dbPath,
+        driver: sqlite3.Database,
+        mode: sqlite3.OPEN_READWRITE,
+      });
+    } catch (e) {
+      console.error('Failed to open database at path:', dbPath, 'err:', e);
+    }
+
+    this.db.run('PRAGMA foreign_keys = ON;');
+
+    await this.db.migrate({
+      migrationsPath: path.join(__dirname, 'migrations'),
+    });
+
+    console.log(process.env.ENV);
+    if (ENV === 'development') {
+      console.log('Seeding data ...');
+      dbPath = path.join(__dirname, dbPath);
+      SEED_USERS.forEach(async (u) => {
+        if (!(await this.getUserById(u.id))) await this.createUser(u);
+      });
+      SEED_OPPORTUNITY.forEach(async (p) => {
+        if (!(await this.getOpportunityByUrl(p.url))) await this.creatOpportunity(p);
+      });
+    }
+
+    return this;
+  }
+
   async countComment(opportunityId: string): Promise<number> {
     const resutl = await this.db.get<{ count: number }>(
       'SELECT COUNT(*) as count FROM comments WHERE  opportunityId = ? ',
@@ -63,7 +102,7 @@ export class SqlDataStore implements Datastore {
   }
 
   async deleteLike(like: Like): Promise<void> {
-    await this.db.run('DELETE FROM likes WHERE userId = ? AND opportunity = ?', like.userId, like.opportunityId);
+    await this.db.run('DELETE FROM likes WHERE userId = ? AND opportunityId = ?', like.userId, like.opportunityId);
   }
 
   async exists(like: Like): Promise<boolean> {
@@ -118,41 +157,10 @@ export class SqlDataStore implements Datastore {
 
   listOpportunities(userId: string): Promise<Opportunity[]> {
     return this.db.all<Opportunity[]>(
-      `SELECT *, EXISTS( SELECT 1 FROM likes WHERE likes.opportunityId = opportunities.id AND likes.userId = ? ) as liked FROM opportunities ORDER BY postedAT DESC`,
+      `SELECT *, EXISTS(
+        SELECT 1 FROM likes WHERE likes.opportunityId = opportunities.id AND likes.userId = ?
+      ) as liked FROM opportunities ORDER BY postedAt DESC`,
       userId
     );
-  }
-
-  public async openDb(dbPath: string) {
-    const { ENV } = process.env;
-    try {
-      console.log('Opening database file at: ', dbPath);
-      this.db = await open({
-        filename: dbPath,
-        driver: sqlite3.Database,
-        mode: sqlite3.OPEN_READWRITE,
-      });
-    } catch (e) {
-      console.error('Failed to open database at path:', dbPath, 'err:', e);
-    }
-
-    this.db.run('PRAGMA foreign_keys = ON;');
-
-    await this.db.migrate({
-      migrationsPath: path.join(__dirname, 'migrations'),
-    });
-
-    console.log(process.env.ENV);
-    if (ENV === 'development') {
-      console.log('Seeding data ...');
-      SEED_USERS.forEach(async (u) => {
-        if (!(await this.getUserById(u.id))) await this.createUser(u);
-      });
-      SEED_OPPORTUNITY.forEach(async (p) => {
-        if (!(await this.getOpportunityByUrl(p.url))) await this.creatOpportunity(p);
-      });
-    }
-
-    return this;
   }
 }

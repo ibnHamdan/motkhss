@@ -60,7 +60,7 @@ export async function createServer(dbPath: string, logRequest: boolean = true) {
 
     config.auth
       ? app[config.method](config.url, jwtParseMiddleware, enforceJwtMiddlware, asyncHandler(handler))
-      : app[config.method](config.url, asyncHandler(handler));
+      : app[config.method](config.url, jwtParseMiddleware, asyncHandler(handler));
   });
 
   app.use(errHandler);
