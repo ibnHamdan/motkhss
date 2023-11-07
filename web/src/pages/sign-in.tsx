@@ -5,6 +5,7 @@ import { ROUTES } from '../routes';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { RequiredInput } from '../components/required-input';
 import { useDocumentTitle } from '../doc-title';
+import { useCurrentUser } from '../components/userContext';
 
 export const SignIn = () => {
   useDocumentTitle('Sign in');
@@ -13,17 +14,20 @@ export const SignIn = () => {
   const [pw, setPw] = useState('');
   const [error, seterror] = useState('');
 
+  const { refreshCurrentUser } = useCurrentUser();
+
   const signin = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       try {
         await signIn(un, pw);
+        refreshCurrentUser();
         navigate(ROUTES.HOME);
       } catch {
         seterror('Bad credential');
       }
     },
-    [navigate, pw, un]
+    [navigate, pw, un, refreshCurrentUser]
   );
 
   useEffect(() => {

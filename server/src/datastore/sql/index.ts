@@ -148,6 +148,16 @@ export class SqlDataStore implements Datastore {
     return this.db.get(`SELECT * FROM users WHERE username = ?`, username);
   }
 
+  async updateCurrentUser(user: Partial<User>): Promise<void> {
+    await this.db.run(
+      'UPDATE users SET userName = ?, firstName = ?, lastName = ? WHERE id = ?',
+      user.userName,
+      user.firstName,
+      user.lastName,
+      user.id
+    );
+  }
+
   async listComments(opportunityId: string): Promise<Comment[]> {
     return await this.db.all<Comment[]>(
       'SELECT * FROM Comments WHERE opportunityId = ? ORDER BY postedAt DESC',

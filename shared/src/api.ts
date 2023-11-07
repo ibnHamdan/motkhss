@@ -68,3 +68,6 @@ export interface GetUserByUserNameResponse {
 
 export type GetCurrentUserRequest = {};
 export type GetCurrentUserResponse = Pick<User, 'id' | 'firstName' | 'lastName' | 'userName' | 'email'>;
+
+export type UpdateCurrentUserRequest = Partial<Omit<User, 'id' | 'emial'>>;
+export type UpdateCurrentUserResponse = {};

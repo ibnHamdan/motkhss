@@ -8,6 +8,8 @@ import {
   SignInResponse,
   SignUpRequest,
   SignUpResponse,
+  UpdateCurrentUserRequest,
+  UpdateCurrentUserResponse,
   User,
 } from '@motkhss/shared';
 import { Datastore } from '../datastore';
@@ -46,6 +48,33 @@ export class UserHandler {
       email: user.email,
     });
   };
+
+  public updateCurrentUser: ExpressHandler<UpdateCurrentUserRequest, UpdateCurrentUserResponse> = async (req, res) => {
+    const currentUserId = res.locals.userId;
+    const { userName } = req.body;
+
+    if (userName && (await this.isDuplicateUserName(currentUserId, userName))) {
+      return res.status(403).send({ error: ERRORS.DUPLICATE_USERNAME });
+    }
+
+    const currentUser = await this.db.getUserById(currentUserId);
+    if (!currentUser) {
+      return res.status(404).send({ error: ERRORS.USER_NOT_FOUND });
+    }
+
+    await this.db.updateCurrentUser({
+      id: currentUserId,
+      userName: userName ?? currentUser.userName,
+      firstName: req.body.firstName ?? currentUser.firstName,
+      lastName: req.body.lastName ?? currentUser.lastName,
+    });
+    return res.sendStatus(200);
+  };
+
+  private async isDuplicateUserName(currentUserId: string, newUserName: string): Promise<boolean> {
+    const userWithProvidedUserName = await this.db.getUserByUsername(newUserName);
+    return userWithProvidedUserName != undefined && userWithProvidedUserName.id !== currentUserId;
+  }
   public signIn: ExpressHandler<SignInRequest, SignInResponse> = async (req, res) => {
     const { login, password } = req.body;
     if (!login || !password) {

@@ -1,6 +1,6 @@
 export type EndpointConfig = {
   url: string;
-  method: 'get' | 'post' | 'delete';
+  method: 'get' | 'post' | 'delete' | 'patch';
   auth?: boolean;
 };
 
@@ -11,6 +11,7 @@ export enum Endpoints {
   signup = 'signup',
   getUser = 'getUser',
   getCurrentUser = 'getCurrentUser',
+  updateCurrentUser = 'updateCurrentUser',
 
   listOpportunities = 'listOpportunities',
   getOpportunity = 'getOpportunity',
@@ -45,6 +46,7 @@ export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
   },
   [Endpoints.getUser]: { url: '/api/v1/users/:id', method: 'get' },
   [Endpoints.getCurrentUser]: { url: '/api/v1/users', method: 'get', auth: true },
+  [Endpoints.updateCurrentUser]: { url: '/api/v1/users', method: 'patch', auth: true },
 
   [Endpoints.listOpportunities]: {
     url: '/api/v1/opportunities',

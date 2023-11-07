@@ -35,6 +35,7 @@ export async function createServer(dbPath: string, logRequest: boolean = true) {
     [Endpoints.signup]: userHandler.signUp,
     [Endpoints.getUser]: userHandler.get,
     [Endpoints.getCurrentUser]: userHandler.getCurrent,
+    [Endpoints.updateCurrentUser]: userHandler.updateCurrentUser,
 
     [Endpoints.listOpportunities]: opportunityHandler.list,
     [Endpoints.getOpportunity]: opportunityHandler.get,

@@ -6,6 +6,7 @@ import { ApiError } from '../fetch';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { RequiredInput } from '../components/required-input';
 import { useDocumentTitle } from '../doc-title';
+import { useCurrentUser } from '../components/userContext';
 
 export const SignUp = () => {
   useDocumentTitle('sign up');
@@ -17,17 +18,20 @@ export const SignUp = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
+  const { refreshCurrentUser } = useCurrentUser();
+
   const signup = useCallback(
     async (e: FormEvent | MouseEvent) => {
       e.preventDefault();
       try {
         await signUp(fname, lname, email, pw, un);
+        refreshCurrentUser();
         navigate(ROUTES.HOME);
       } catch (e) {
         setError((e as ApiError).message);
       }
     },
-    [fname, lname, email, pw, un, navigate]
+    [fname, lname, email, pw, un, navigate, refreshCurrentUser]
   );
 
   useEffect(() => {
