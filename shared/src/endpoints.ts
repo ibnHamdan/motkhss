@@ -1,5 +1,3 @@
-import { tr } from 'date-fns/locale';
-
 export type EndpointConfig = {
   url: string;
   method: 'get' | 'post' | 'delete' | 'patch';

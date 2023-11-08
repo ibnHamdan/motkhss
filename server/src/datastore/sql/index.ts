@@ -4,6 +4,7 @@ import path from 'path';
 import { Datastore } from '..';
 import { User, Opportunity, Like, Comment } from '@motkhss/shared';
 import { SEED_OPPORTUNITY, SEED_USERS } from './seeds';
+import { LOGGER } from '../../logging';
 
 export class SqlDataStore implements Datastore {
   private db!: Database<sqlite3.Database, sqlite3.Statement>;
@@ -16,14 +17,15 @@ export class SqlDataStore implements Datastore {
     }
 
     try {
-      console.log('Opening database file at: ', dbPath);
+      LOGGER.info('Opening database file at: ', dbPath);
       this.db = await open({
         filename: dbPath,
         driver: sqlite3.Database,
         mode: sqlite3.OPEN_READWRITE,
       });
     } catch (e) {
-      console.error('Failed to open database at path:', dbPath, 'err:', e);
+      LOGGER.error('Failed to open database at path:', dbPath, 'err:', e);
+      process.exit(1);
     }
 
     this.db.run('PRAGMA foreign_keys = ON;');
@@ -32,9 +34,8 @@ export class SqlDataStore implements Datastore {
       migrationsPath: path.join(__dirname, 'migrations'),
     });
 
-    console.log(process.env.ENV);
     if (ENV === 'development') {
-      console.log('Seeding data ...');
+      LOGGER.info('Seeding data ...');
       dbPath = path.join(__dirname, dbPath);
       SEED_USERS.forEach(async (u) => {
         if (!(await this.getUserById(u.id))) await this.createUser(u);

@@ -1,4 +1,4 @@
-import { /*db,*/ db, initDB } from './datastore';
+import { db, initDB } from './datastore';
 
 import { requestLoggerMiddleware } from './middleware/loggerMiddleware';
 import { errHandler } from './middleware/errorrMiddleware';
@@ -11,12 +11,13 @@ import { LikeHandler } from './handlers/likeHandler';
 import { CommentHandler } from './handlers/commentHandler';
 import { ENDPOINT_CONFIGS, Endpoints } from '@motkhss/shared';
 import { UserHandler } from './handlers/userHandler';
+import { LOGGER } from './logging';
 
 export async function createServer(logRequest: boolean = true) {
   const dbPath = process.env.DB_PATH;
 
   if (!dbPath) {
-    console.error('DB_PATH env var missing');
+    LOGGER.error('DB_PATH env var missing');
     process.exit(1);
   }
   await initDB(dbPath);

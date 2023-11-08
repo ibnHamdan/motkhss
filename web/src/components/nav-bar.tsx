@@ -32,6 +32,8 @@ export const NavBar = () => {
               <Link to={ROUTES.USER_PORFIEL(currentUser.id)}>
                 <Text fontSize={'sm'} color={'gray.600'}>
                   {currentUser.userName}
+                  {currentUser.firstName}
+                  {currentUser.lastName}
                 </Text>
               </Link>
             )}
