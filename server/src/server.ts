@@ -12,7 +12,13 @@ import { CommentHandler } from './handlers/commentHandler';
 import { ENDPOINT_CONFIGS, Endpoints } from '@motkhss/shared';
 import { UserHandler } from './handlers/userHandler';
 
-export async function createServer(dbPath: string, logRequest: boolean = true) {
+export async function createServer(logRequest: boolean = true) {
+  const dbPath = process.env.DB_PATH;
+
+  if (!dbPath) {
+    console.error('DB_PATH env var missing');
+    process.exit(1);
+  }
   await initDB(dbPath);
 
   const app = express();

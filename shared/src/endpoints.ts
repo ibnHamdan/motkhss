@@ -1,7 +1,10 @@
+import { tr } from 'date-fns/locale';
+
 export type EndpointConfig = {
   url: string;
   method: 'get' | 'post' | 'delete' | 'patch';
   auth?: boolean;
+  sensitive?: boolean;
 };
 
 export enum Endpoints {
@@ -38,11 +41,13 @@ export const ENDPOINT_CONFIGS: { [key in Endpoints]: EndpointConfig } = {
     url: '/api/v1/signin',
     method: 'post',
     auth: false,
+    sensitive: true,
   },
   [Endpoints.signup]: {
     url: '/api/v1/signup',
     method: 'post',
     auth: false,
+    sensitive: true,
   },
   [Endpoints.getUser]: { url: '/api/v1/users/:id', method: 'get' },
   [Endpoints.getCurrentUser]: { url: '/api/v1/users', method: 'get', auth: true },
