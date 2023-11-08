@@ -13,6 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@logtail/node": "^0.4.12",
+    "@logtail/winston": "^0.4.12",
     "@motkhss/shared": "file:../shared",
     "@types/cors": "^2.8.15",
     "cors": "^2.8.5",
@@ -26,7 +28,8 @@
     "sqlite": "^5.0.1",
     "sqlite3": "^5.1.6",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",

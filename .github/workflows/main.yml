@@ -34,6 +34,7 @@ jobs:
           PASSWORD_SALT: ${{ secrets.PASSWORD_SALT}}
           PORT: ${{ secrets.PORT }}
           ENV: ${{ secrets.ENV}}
+          LOGTAIL_TOKEN: ${{secrets.LOGTAIL_TOKEN}}
         run: |
           cd server
           npm run start:prod

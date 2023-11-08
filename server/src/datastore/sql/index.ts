@@ -17,14 +17,14 @@ export class SqlDataStore implements Datastore {
     }
 
     try {
-      LOGGER.info('Opening database file at: ', dbPath);
+      LOGGER.info('Opening database file at: ' + dbPath);
       this.db = await open({
         filename: dbPath,
         driver: sqlite3.Database,
         mode: sqlite3.OPEN_READWRITE,
       });
     } catch (e) {
-      LOGGER.error('Failed to open database at path:', dbPath, 'err:', e);
+      LOGGER.error('Failed to open database at path: ' + dbPath, 'err: ' + e);
       process.exit(1);
     }
 
