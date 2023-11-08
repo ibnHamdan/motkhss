@@ -40,6 +40,8 @@ export const ViewOpportunity = () => {
   } = useQuery(['listComments'], () =>
     callEndpoint<{}, ListCommentsResponse>(withParams(ENDPOINT_CONFIGS.listComments, opportunityId!))
   );
+  const opportunityName = isLoading ? 'Loading ...' : error || !data ? 'Error' : data.opportunity.title;
+  useDocumentTitle(opportunityName);
 
   const [comment, setComment] = useState('');
   const submitComment = useCallback(async () => {
@@ -56,10 +58,7 @@ export const ViewOpportunity = () => {
     });
     setComment('');
     refetchComments();
-  }, [comment, opportunityId, refetchComments, opportunityId]);
-
-  const opportunityName = isLoading ? 'Loading ...' : error || !data ? 'Error' : data.opportunity.title;
-  useDocumentTitle(opportunityName);
+  }, [comment, opportunityId, refetchComments, opportunityName]);
 
   if (isLoading) {
     return <div>Loading ... </div>;
