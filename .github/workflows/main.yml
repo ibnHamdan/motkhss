@@ -35,6 +35,7 @@ jobs:
           PORT: ${{ secrets.PORT }}
           ENV: ${{ secrets.ENV}}
           LOGTAIL_TOKEN: ${{secrets.LOGTAIL_TOKEN}}
+          MIXPANEL_TOKEN: ${{secrets.MIXPANEL_TOKEN}}
         run: |
           cd server
           npm run start:prod

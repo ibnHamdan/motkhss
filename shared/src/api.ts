@@ -1,5 +1,11 @@
 import { Comment, Opportunity, User } from './types';
 
+// Tracking APIs
+export interface TrackRequest {
+  eventName: string;
+  payload?: unknown;
+}
+
 // Opportunity APIs
 export interface ListOpportunitiesRequest {}
 export interface ListOpportunitiesResponse {
