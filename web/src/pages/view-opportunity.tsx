@@ -5,6 +5,7 @@ import {
   GetOpportunityRequest,
   GetOpportunityResponse,
   ListCommentsResponse,
+  TrackRequest,
   withParams,
 } from '@motkhss/shared';
 import { useQuery } from '@tanstack/react-query';
@@ -44,11 +45,18 @@ export const ViewOpportunity = () => {
   const submitComment = useCallback(async () => {
     await callEndpoint<CreateCommentRequest, CreateCommentResponse>(
       withParams(ENDPOINT_CONFIGS.createComment, opportunityId!),
+
       { comment }
     );
+    callEndpoint<TrackRequest, unknown>(ENDPOINT_CONFIGS.track, {
+      eventName: 'comment',
+      payload: {
+        opportunityName,
+      },
+    });
     setComment('');
     refetchComments();
-  }, [comment, opportunityId, refetchComments]);
+  }, [comment, opportunityId, refetchComments, opportunityId]);
 
   const opportunityName = isLoading ? 'Loading ...' : error || !data ? 'Error' : data.opportunity.title;
   useDocumentTitle(opportunityName);
