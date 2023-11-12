@@ -1,8 +1,8 @@
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Button, Flex, HStack, Switch, Text } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../routes';
 import { isLoggedIn, signOut } from '../fetch/auth';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useCurrentUser } from './userContext';
 
 export const NavBar = () => {
@@ -13,6 +13,11 @@ export const NavBar = () => {
     refreshCurrentUser();
     navigate(ROUTES.HOME);
   }, [navigate, refreshCurrentUser]);
+  const [lang, setLang] = useState('rtl');
+
+  useEffect(() => {
+    document.documentElement.dir = lang;
+  }, [lang]);
 
   return (
     <Flex py={4} px={10} align={'center'} justify={'space-between'} h={16}>
@@ -56,6 +61,11 @@ export const NavBar = () => {
             </Link>
           </>
         )}
+        <HStack>
+          <Text>عربي</Text>
+          <Switch onChange={(e) => setLang(e.target.checked ? 'en' : 'rtl')} />
+          <Text>EN</Text>
+        </HStack>
       </Flex>
     </Flex>
   );

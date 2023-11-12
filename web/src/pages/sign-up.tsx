@@ -2,11 +2,12 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isLoggedIn, signUp } from '../fetch/auth';
 import { ROUTES } from '../routes';
-import { ApiError } from '../fetch';
+import { ApiError, callEndpoint } from '../fetch';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { RequiredInput } from '../components/required-input';
 import { useDocumentTitle } from '../doc-title';
 import { useCurrentUser } from '../components/userContext';
+import { ENDPOINT_CONFIGS, TrackRequest } from '@motkhss/shared';
 
 export const SignUp = () => {
   useDocumentTitle('sign up');
@@ -25,6 +26,10 @@ export const SignUp = () => {
       e.preventDefault();
       try {
         await signUp(fname, lname, email, pw, un);
+        callEndpoint<TrackRequest, unknown>(ENDPOINT_CONFIGS.track, {
+          eventName: `SignUP${un}`,
+          payload: { fname, lname, email },
+        });
         refreshCurrentUser();
         navigate(ROUTES.HOME);
       } catch (e) {
